@@ -15,14 +15,11 @@ export const getHomePagePosts = createAsyncThunk("/get", async () => {
         const res = axiosInstance.get("/blogs/");
 
         const response = await res;
-        console.log(response.data);
-        return response.data;
+        return response.data.data;
     } catch (err) {
         toast.error(err?.response?.data?.message);
     }
 })
-
-
 
 // Slice for Blog Api
 
