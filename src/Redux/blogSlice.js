@@ -32,11 +32,12 @@ const blogSlice = createSlice({
             if(action.payload){
                 state.trendingPosts = [...action.payload.trendingPosts];
                 state.popularAuthorPosts  = [...action.payload.authorPosts];
-                state.tags = [...action.payload.topKeywords];
+                state.tags = [...action.payload.topKeywords].slice(0, 9);
             }
         });
     },
 });
+
 
 export const {} = blogSlice.actions;
 export default blogSlice.reducer;
