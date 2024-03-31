@@ -20,8 +20,8 @@ const Layout = ({ children }) => {
   const year = date.getFullYear();
 
   return (
-    <>
-      <nav className=" sticky top-0 z-50 w-full bg-indigo-600">
+    <div className="flex min-h-screen flex-col ">
+      <nav className="sticky top-0 z-50 w-full bg-indigo-600">
         <div className="container mx-auto  items-center justify-between px-3 text-white md:w-10/12">
           <div className="flex w-full items-center justify-between py-2">
             {/* Logo */}
@@ -84,7 +84,7 @@ const Layout = ({ children }) => {
         </div>
       </nav>
       {children}
-      <footer className="w-full bg-indigo-600">
+      <footer className="relative bottom-0 w-full bg-indigo-600 mt-auto">
         <div className="container footer mx-auto items-center p-10 px-3 text-neutral-content md:w-10/12">
           <aside>
             <p className="text-3xl font-bold">Alcodemy</p>
@@ -119,7 +119,7 @@ const Layout = ({ children }) => {
           </aside>
         </div>
       </footer>
-    </>
+    </div>
   );
 };
 

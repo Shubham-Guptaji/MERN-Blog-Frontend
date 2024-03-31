@@ -8,6 +8,8 @@ const AuthRecent = (props) => {
           <img
             src={props.element.public_image.resource_url}
             alt={props.element.title}
+            height="1600px"
+            width="900px"
             className="w-full aspect-video"
             onClick={() => {
               navigate(`/post/${props.element.url}`);

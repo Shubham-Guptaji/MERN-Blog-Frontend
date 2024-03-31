@@ -13,7 +13,6 @@ const initialState = {
 export const getHomePagePosts = createAsyncThunk("/get", async () => {
     try {
         const res = axiosInstance.get("/blogs/");
-
         const response = await res;
         return response.data.data;
     } catch (err) {
