@@ -6,12 +6,13 @@ import { Link, useNavigate } from "react-router-dom";
 import homeImage from "../assets/undraw_Happy_news_re_tsbd.png";
 import AuthRecent from "../Components/Home/Auth-Recent-Card";
 import TrendingCards from "../Components/Home/Trending-Cards";
-import Layout from "../Layout.js/Layout";
+import Layout from "../Layout/Layout";
 import { getHomePagePosts } from "../Redux/blogSlice";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
+  const isLoggedIn = false;
   useEffect(() => {
     dispatch(getHomePagePosts());
   }, []);
@@ -19,7 +20,6 @@ const HomePage = () => {
   const { trendingPosts, popularAuthorPosts, tags } = useSelector(
     (state) => state.blog
   );
-  // const { popularAuthorPosts } = useSelector((state) => state.blog);
   return (
     <Layout>
       <header className="container mx-auto flex flex-col-reverse px-3 md:w-10/12 md:flex-row">
@@ -32,7 +32,7 @@ const HomePage = () => {
               Explore narratives, ideas, and knowledge shared by authors across
               diverse topics.
             </p>
-            <button className="btn btn-primary mt-5 bg-indigo-700 text-xl md:mt-3 lg:mt-5 lg:tracking-wider xl:mt-9" onClick={()=> Navigate("/create")}>
+            <button className="btn btn-primary mt-5 bg-indigo-700 text-xl md:mt-3 lg:mt-5 lg:tracking-wider xl:mt-9" onClick={()=> isLoggedIn ? Navigate("/create") : Navigate("/sign-up")}>
               Create Own
             </button>
           </div>

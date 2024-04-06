@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom"; // Import Link for proper navigation
 
 const Layout = ({ children }) => {
+  useEffect(() => {
+    // scroll to the top on page render
+    window.scrollTo(0, 0);
+  }, []);
   const [isOpen, setIsOpen] = useState(false);
   let isLoggedIn = false;
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -40,9 +44,9 @@ const Layout = ({ children }) => {
               ))}
               <li className="m-0 cursor-pointer rounded bg-red-500 p-2 pb-1 pt-1 text-white ring-1 ring-red-600 hover:bg-red-600 hover:ring-red-700">
                 {isLoggedIn ? (
-                  <Link to="dashboard">Dashboard</Link>
+                  <Link to="/dashboard">Dashboard</Link>
                 ) : (
-                  <Link to="sign-up">Sign Up</Link>
+                  <Link to="/sign-up">Sign Up</Link>
                 )}
               </li>
             </ul>
@@ -80,11 +84,30 @@ const Layout = ({ children }) => {
                 </Link>
               </li>
             ))}
+            <li className="block px-4 py-0.5 font-serif text-base-200 hover:text-white">
+              {isLoggedIn ? (
+                <Link
+                  to="/dashboard"
+                  className="block text-lg font-medium text-white"
+                  onClick={toggleMenu}
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  to="/sign-up"
+                  className="block text-lg font-medium text-white"
+                  onClick={toggleMenu}
+                >
+                  Sign Up
+                </Link>
+              )}
+            </li>
           </ul>
         </div>
       </nav>
       {children}
-      <footer className="relative bottom-0 w-full bg-indigo-600 mt-auto">
+      <footer className="relative bottom-0 mt-auto w-full bg-indigo-600">
         <div className="container footer mx-auto items-center p-10 px-3 text-neutral-content md:w-10/12">
           <aside>
             <p className="text-3xl font-bold">Alcodemy</p>

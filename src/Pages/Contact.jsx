@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 import ContactImage from "../assets/undraw_things_to_say_re_jpcg.svg"
 import axiosInstance from "../Helper/axiosInstance";
-import Layout from "../Layout.js/Layout";
+import Layout from "../Layout/Layout";
 
 const Contact = () => {
   const [userInput, setUserInput] = useState({
