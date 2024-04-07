@@ -251,11 +251,11 @@ const SignUp = () => {
                 />
               </label>
               <button type="submit" className="btn btn-primary  mt-7">
-                Primary
+                Create
               </button>
-              <p className="mt-3 flex max-w-xs">
+              <p className="mt-3 max-w-xs">
                 Already have an account ?&nbsp;{" "}
-                <Link to={"/login"} className="cursor-pointer text-indigo-500">
+                <Link to={"/sign-in"} className="cursor-pointer text-indigo-500">
                   Login to Account
                 </Link>
               </p>

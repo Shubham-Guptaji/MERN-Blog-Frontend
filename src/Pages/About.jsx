@@ -7,7 +7,7 @@ const About = () => {
     <Layout>
       <div>
         {/* Hero Section */}
-        <div className="bg-gray-900 py-10 xl:py-20 text-white">
+        <div className=" py-10 xl:py-20 shadow-md">
           <div className="container mx-auto px-4">
             <div className="flex flex-col-reverse items-center justify-center lg:flex-row">
               <div className="max-w-xl text-center xl:mr-8 lg:text-left">

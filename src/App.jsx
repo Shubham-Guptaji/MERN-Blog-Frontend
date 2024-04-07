@@ -6,12 +6,14 @@ import Contact from "./Pages/Contact";
 import  HomePage from "./Pages/HomePage";
 import NotFound from "./Pages/NotFound";
 import { PrivacyPolicy } from "./Pages/Privacy-Policy";
+import SignIn from "./Pages/Sign-in";
 import SignUp from "./Pages/Sign-up";
+import AuthToken from "./utils/AuthToken";
 
 function App() {
 
   return (
-    <>
+    <AuthToken>
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/contact" element={<Contact/>} />
@@ -20,9 +22,12 @@ function App() {
 
         <Route path="/sign-up" element={<SignUp/>} />
 
+
+        <Route path="/sign-in" element={<SignIn/>} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </AuthToken>
   );
 }
 

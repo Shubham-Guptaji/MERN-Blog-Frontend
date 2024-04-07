@@ -1,27 +1,33 @@
 import { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { Link } from "react-router-dom"; // Import Link for proper navigation
+import { useDispatch,useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom"; // Import Link for proper navigation
+
+import { logout } from "../Redux/authSlice"
 
 const Layout = ({ children }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     // scroll to the top on page render
     window.scrollTo(0, 0);
   }, []);
   const [isOpen, setIsOpen] = useState(false);
-  let isLoggedIn = false;
+  let isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navigationItems = [
-    { name: "Home", to: "/" }, // Use `to` for React Router DOM
+    { name: "Home", to: "/" },
     { name: "All Posts", to: "/posts" },
-    // { name: "About", to: "/about" },
     { name: "Contact", to: "/contact" },
-    isLoggedIn
-      ? { name: "Logout", to: "/logout" }
-      : { name: "Sign In", to: "/sign-in" },
   ];
   const date = new Date();
   const year = date.getFullYear();
+
+  const logouthandler = async () => {
+    const res = await dispatch(logout());
+    if(res?.payload?.success) navigate("/sign-in");
+  }
 
   return (
     <div className="flex min-h-screen flex-col ">
@@ -42,6 +48,13 @@ const Layout = ({ children }) => {
                   </Link>
                 </li>
               ))}
+              <li className="text-base-200 hover:text-white">
+                {isLoggedIn ? (
+                  <span onClick={logouthandler}>Logout</span>
+                ) : (
+                  <Link to="/sign-in">Sign In</Link>
+                )}
+              </li>
               <li className="m-0 cursor-pointer rounded bg-red-500 p-2 pb-1 pt-1 text-white ring-1 ring-red-600 hover:bg-red-600 hover:ring-red-700">
                 {isLoggedIn ? (
                   <Link to="/dashboard">Dashboard</Link>
@@ -84,6 +97,26 @@ const Layout = ({ children }) => {
                 </Link>
               </li>
             ))}
+            <li className="block px-4 py-0.5 font-serif text-base-200 hover:text-white">
+              {isLoggedIn ? (
+                <span onClick={logouthandler}>
+                  <span
+                  className="block text-lg font-medium text-white"
+                  onClick={toggleMenu}
+                >
+                  Logout
+                </span>
+                </span>
+              ) : (
+                <Link
+                  to="/sign-in"
+                  className="block text-lg font-medium text-white"
+                  onClick={toggleMenu }
+                >
+                  Sign In
+                </Link>
+              )}
+            </li>
             <li className="block px-4 py-0.5 font-serif text-base-200 hover:text-white">
               {isLoggedIn ? (
                 <Link
