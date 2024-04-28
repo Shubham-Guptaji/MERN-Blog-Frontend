@@ -31,7 +31,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="flex min-h-screen flex-col ">
-      <nav className="sticky top-0 z-50 w-full bg-indigo-600">
+      <nav className="sticky top-0 z-20 w-full bg-indigo-600">
         <div className="container mx-auto  items-center justify-between px-3 text-white md:w-10/12">
           <div className="flex w-full items-center justify-between py-2">
             {/* Logo */}
@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
                   </Link>
                 </li>
               ))}
-              <li className="text-base-200 hover:text-white">
+              <li className="text-base-200 hover:text-white cursor-pointer">
                 {isLoggedIn ? (
                   <span onClick={logouthandler}>Logout</span>
                 ) : (

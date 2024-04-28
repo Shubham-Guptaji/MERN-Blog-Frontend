@@ -12,7 +12,7 @@ import { getHomePagePosts } from "../Redux/blogSlice";
 const HomePage = () => {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
-  const isLoggedIn = false;
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   useEffect(() => {
     dispatch(getHomePagePosts());
   }, []);
@@ -64,7 +64,7 @@ const HomePage = () => {
             ))}
           </div>
           <div className="mx-auto mb-5 w-10/12 md:w-4/12">
-            <div className="flex flex-wrap gap-3 px-2">
+            {/* <div className="flex flex-wrap gap-3 px-2">
               {tags.map((element) => {
                 return (
                   <Link
@@ -76,7 +76,23 @@ const HomePage = () => {
                   </Link>
                 );
               })}
+            </div> */}
+
+            <div className="flex flex-wrap gap-3 px-2">
+              {tags.map((element) => {
+                return (
+                  <button
+                    // to={`/search/${element.replace(/\s+/g, "-")}`}
+                    key={element}
+                    className="rounded-full p-3 pb-2 pt-2 text-center text-indigo-600 ring-2"
+                    onClick={() => Navigate("/posts", { state: { tag : element } })}
+                  >
+                    {element}
+                  </button>
+                );
+              })}
             </div>
+
           </div>
         </div>
       </section>
