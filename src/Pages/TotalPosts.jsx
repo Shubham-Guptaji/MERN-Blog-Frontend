@@ -24,15 +24,13 @@ const TotalPosts = () => {
     clearTimeout(timer);
     // Set a new timer for 1 second
     const newTimer = setTimeout(() => {
-      if (value != "") dispatch(searchTag({tag : value }));
+      if (value != "") dispatch(searchTag({ tag: value }));
       // Perform your search logic here (e.g., call an API)
     }, 1200);
 
     setTimer(newTimer);
     setSearchInput((prevInput) => value); // Use functional update
   };
-
-  
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -58,10 +56,10 @@ const TotalPosts = () => {
   };
 
   useEffect(() => {
-    if(tag != null) {
-      dispatch(searchTag({tag : tag, skip : currentPage * 20 }))
-    }
-    else dispatch(allblogposts(currentPage * 20));
+    if (tag != null) {
+      dispatch(searchTag({ tag: tag, skip: currentPage * 20 }));
+    } else dispatch(allblogposts(currentPage * 20));
+    window.scrollTo(0, 0);
   }, [currentPage, tag]);
   return (
     <Layout>
@@ -98,7 +96,7 @@ const TotalPosts = () => {
                     </button>
                   </li>
                   <span className="mt-12"></span>
-                  {keywords.map((element) => {
+                  {/* {keywords.map((element) => {
                     return (
                       <li key={element}>
                         <Link
@@ -107,6 +105,27 @@ const TotalPosts = () => {
                         >
                           {element}
                         </Link>
+                      </li>
+                    );
+                  })} */}
+
+                  {keywords.map((element) => {
+                    return (
+                      <li 
+                        key={element}
+                        onClick={() => {
+                          setTag(element);
+                          setCurrentPage(0);
+                          hideDrawer();
+                        }}
+                        className="text-clip text-base text-white"
+                      >
+                        {/* <Link
+                          to={`/search/${element.replace(/\s+/g, "-")}`}
+                          className="text-clip text-base text-white"
+                        > */}
+                          {element}
+                        {/* </Link> */}
                       </li>
                     );
                   })}
@@ -153,8 +172,7 @@ const TotalPosts = () => {
                 onClick={() => {
                   setTag(element);
                   setCurrentPage(0);
-                }
-                }
+                }}
               >
                 {element}
               </button>
