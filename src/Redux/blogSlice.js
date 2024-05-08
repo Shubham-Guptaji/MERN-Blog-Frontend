@@ -9,8 +9,31 @@ const initialState = {
     tags: [],
     allPosts: [],
     areMore: false,
-    keywords: []
+    keywords: [],
+    currentPost : {
+        postDetails : {},
+        comments : {},
+    }
 }
+
+export const createPost = createAsyncThunk("/", async (data) => {
+    try {
+        
+        let res = axiosInstance.post("/blogs/create", data);
+        toast.promise(res, {
+            loading: "Loading...",
+            // success: (data) => {
+            //     return data?.data?.message;
+            // },
+            success: "Blog Post created Successfully",
+            error: "Failed to create the Post",
+        });
+        res = await res;
+        return res.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
 
 // function to get all the home page blog posts
 export const getHomePagePosts = createAsyncThunk("/get", async () => {
@@ -18,6 +41,23 @@ export const getHomePagePosts = createAsyncThunk("/get", async () => {
         const res = axiosInstance.get("/blogs/");
         const response = await res;
         return response.data.data;
+    } catch (err) {
+        toast.error(err?.response?.data?.message);
+    }
+})
+
+export const getPost = createAsyncThunk("/post/get", async (url) => {
+    try {
+        let res = axiosInstance.get(`/blogs/${url}`);
+        toast.promise(res, {
+            loading: "Loading...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to load the Post",
+        });
+        res = await res;
+        return res.data;
     } catch (err) {
         toast.error(err?.response?.data?.message);
     }
@@ -72,6 +112,12 @@ const blogSlice = createSlice({
                     state.allPosts = [...action.payload.posts];
                     state.areMore = action.payload.areMore;
                     state.keywords = [...action.payload.keywords].slice(0, 10);
+                }
+            })
+            .addCase(getPost.fulfilled, (state, action) => {
+                if(action.payload){
+                    state.currentPost.postDetails = action.payload.postDetails;
+                    state.currentPost.comments = action.payload.comments;
                 }
             })
     },

@@ -81,9 +81,10 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(createAccount.fulfilled, (state, action) => {
-                // localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
-                // localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
-                // localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
+                localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
+                localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
+                localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
+
                 localStorage.setItem("token", action?.payload?.user?.tokens ? JSON.stringify(action?.payload?.user?.tokens) : "");
                 state.isLoggedIn = action?.payload?.success;
                 state.data = action?.payload?.user;
@@ -91,10 +92,12 @@ const authSlice = createSlice({
                 state.token = action?.payload?.user?.tokens;
             })
             .addCase(loginAccount.fulfilled, (state, action) => {
-                // localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
-                // localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
-                // localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
+                localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
+                localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
+                localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
+
                 localStorage.setItem("token", action?.payload?.user?.tokens ? JSON.stringify(action?.payload?.user?.tokens) : "");
+
                 state.isLoggedIn = action?.payload?.success;
                 state.data = action?.payload?.user;
                 state.role = action?.payload?.user?.role;
@@ -115,8 +118,9 @@ const authSlice = createSlice({
             })
             .addCase(updateToken.fulfilled, (state, action) => {
                 // localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
-                // localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
+                localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
                 // localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
+
                 localStorage.setItem("token", action?.payload?.tokens ? JSON.stringify(action?.payload?.tokens) : "");
                 state.isLoggedIn = action?.payload?.success;
                 state.token = action?.payload?.tokens;
@@ -126,6 +130,7 @@ const authSlice = createSlice({
                 state.isLoggedIn = false;
                 state.token = null;
                 state.data = null;
+                window.location.href = "https://blog.alcodemy.tech";
             })
     }
 })

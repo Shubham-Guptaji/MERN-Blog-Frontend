@@ -12,7 +12,7 @@ const TrendingCards = (props) => {
             width="900px"
             className="aspect-video cursor-pointer"
             onClick={() => {
-                navigate(`/post/${props.element.url}`);
+                navigate(`/posts/${props.element.url}`);
               }}
           />
         </figure>
@@ -20,7 +20,7 @@ const TrendingCards = (props) => {
           <h2
             className="card-title line-clamp-2 cursor-pointer text-indigo-600"
             onClick={() => {
-              navigate(`/post/${props.element.url}`);
+              navigate(`/posts/${props.element.url}`);
             }}
           >
             {props.element.title}
@@ -32,7 +32,7 @@ const TrendingCards = (props) => {
             <img
               src={props.element.author.avatar.secure_url}
               alt={props.element.author.username}
-              className="h-8 w-8 rounded-full"
+              className="h-8 w-8 rounded-full" 
             />
             <Link to={`/username/${props.element.author.username}`}>
               {props.element.author.firstName} {props.element.author.lastName}

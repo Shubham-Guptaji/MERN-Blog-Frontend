@@ -1,8 +1,13 @@
 import { Helmet } from "react-helmet";
 import { Route, Routes } from "react-router-dom";
 
+import NotRequireAuth from "./Components/Auth/NotRequireAuth";
+import RequireAuth from "./Components/Auth/RequireAuth";
 import About from "./Pages/About";
+import Create from "./Pages/Blogs/Create";
+import Post from "./Pages/Blogs/Post";
 import Contact from "./Pages/Contact";
+import Denied from "./Pages/Denied";
 import HomePage from "./Pages/HomePage";
 import NotFound from "./Pages/NotFound";
 import { PrivacyPolicy } from "./Pages/Privacy-Policy";
@@ -20,7 +25,10 @@ function App() {
           name="description"
           content="Alcodemy blog is a web based blogging website when user can read as well as create their own blog."
         />
-        <meta name="title" content="Alcodemy Blog - Blog For User and By User" />
+        <meta
+          name="title"
+          content="Alcodemy Blog - Blog For User and By User"
+        />
         <link rel="icon" type="image/x-icon" href="./Alcodemy.png" />
 
         <meta property="og:type" content="website" />
@@ -59,11 +67,18 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/about" element={<About />} />
+        <Route path="/denied" element={<Denied />} />
 
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/posts/:url" element={<Post />} />
 
-        <Route path="/sign-in" element={<SignIn />} />
-
+        <Route element={<NotRequireAuth />} >
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/sign-in" element={<SignIn />} />
+        </Route>
+        
+        <Route element={<RequireAuth allowedRoles={["user", "admin"]}/>} >
+          <Route path="/create" element={<Create />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthToken>

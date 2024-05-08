@@ -12,7 +12,7 @@ const AuthRecent = (props) => {
             width="900px"
             className="w-full aspect-video"
             onClick={() => {
-              navigate(`/post/${props.element.url}`);
+              navigate(`/posts/${props.element.url}`);
             }}
           />
         </figure>
@@ -31,14 +31,14 @@ const AuthRecent = (props) => {
           <h2
             className="card-title line-clamp-2 cursor-pointer text-indigo-600"
             onClick={() => {
-              navigate(`/post/${props.element.url}`);
+              navigate(`/posts/${props.element.url}`);
             }}
           >
             {props.element.title}
           </h2>
           <p className=" line-clamp-3 text-justify font-medium text-gray-600 cursor-pointer"
             onClick={() => {
-                navigate(`/post/${props.element.url}`);
+                navigate(`/posts/${props.element.url}`);
               }}
           >
             {props.element.metaDescription}

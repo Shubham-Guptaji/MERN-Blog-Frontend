@@ -14,8 +14,9 @@ const Layout = ({ children }) => {
   }, []);
   const [isOpen, setIsOpen] = useState(false);
   let isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  let authId = useSelector(state => state?.auth?.data?.id);
   const toggleMenu = () => setIsOpen(!isOpen);
-
+  
   const navigationItems = [
     { name: "Home", to: "/" },
     { name: "All Posts", to: "/posts" },
@@ -27,6 +28,9 @@ const Layout = ({ children }) => {
   const logouthandler = async () => {
     const res = await dispatch(logout());
     if(res?.payload?.success) navigate("/sign-in");
+  }
+  if(isLoggedIn && !authId) {
+    logouthandler();
   }
 
   return (
