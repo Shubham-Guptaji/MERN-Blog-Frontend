@@ -46,9 +46,9 @@ export const getHomePagePosts = createAsyncThunk("/get", async () => {
     }
 })
 
-export const getPost = createAsyncThunk("/post/get", async (url) => {
+export const getPost = createAsyncThunk("/post/get", async (data) => {
     try {
-        let res = axiosInstance.get(`/blogs/${url}`);
+        let res = axiosInstance.post(`/blogs/${data.url}`, data);
         toast.promise(res, {
             loading: "Loading...",
             success: (data) => {

@@ -1,21 +1,15 @@
-import AttachesTool from "@editorjs/attaches";
-import CheckList from "@editorjs/checklist";
 import Code from "@editorjs/code";
 import Delimiter from "@editorjs/delimiter";
 import EditorJS from "@editorjs/editorjs";
-import Embed from "@editorjs/embed";
+import Embed from '@editorjs/embed';
 import Header from "@editorjs/header";
 import Image from "@editorjs/image";
-import InlineCode from "@editorjs/inline-code";
-import Link from "@editorjs/link";
-import Marker from "@editorjs/marker";
-import NestedList from "@editorjs/nested-list";
+import NestedList from "@editorjs/nested-list"; 
 import Paragraph from "@editorjs/paragraph";
 import Quote from "@editorjs/quote";
 import Raw from "@editorjs/raw";
 import SimpleImage from "@editorjs/simple-image";
 import Table from "@editorjs/table";
-import Warning from "@editorjs/warning";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -94,32 +88,10 @@ function Editor() {
           class: NestedList,
           inlineToolbar: true,
           config: {
-            defaultStyle: "unordered",
+            defaultStyle: "unordered", 
           },
         },
-        checklist: CheckList,
         quote: Quote,
-        attaches: {
-          class: AttachesTool,
-          config: {
-            uploader: {
-              async uploadByFile(file) {
-                const response = await dispatch(ResourceUpload(file));
-                if (!response?.payload?.success) {
-                  throw new Error("File upload failed");
-                }
-                let newId = response?.payload?.data?.id;
-                setResourceArr({...resourceArr, newId})
-                return {
-                  success: 1,
-                  file: {
-                    url: response?.payload?.data?.resource_url,
-                  },
-                };
-              },
-            },
-          },
-        },
         image: {
           class: Image,
           config: {
@@ -140,20 +112,21 @@ function Editor() {
               },
             },
           },
-        },
+        }, 
         simpleImage: SimpleImage,
-        link: Link,
         embed: {
           class: Embed,
-          inlineToolbar: true,
+          config: {
+            services: {
+              youtube: true,
+              coub: true
+            }
+          }
         },
         table: Table,
         delimiter: Delimiter,
-        warning: Warning,
         code: Code,
         raw: Raw,
-        marker: Marker,
-        inlineCode: InlineCode,
       },
       onReady: () => {
         console.log("Editor.js is ready");

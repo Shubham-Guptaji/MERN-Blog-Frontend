@@ -4,13 +4,13 @@ import toast from "react-hot-toast";
 import axiosInstance from "../Helper/axiosInstance";
 
 const initialState = {
-    // isLoggedIn: localStorage.getItem("isLoggedIn") ? JSON.parse(localStorage.getItem("isLoggedIn")) : false,
-    // data: localStorage.getItem("data") ? JSON.parse(localStorage.getItem("data")) : "",
-    // role: localStorage.getItem("role") || "",
+    isLoggedIn: localStorage.getItem("isLoggedIn") ? JSON.parse(localStorage.getItem("isLoggedIn")) : false,
+    data: localStorage.getItem("data") ? JSON.parse(localStorage.getItem("data")) : "",
+    role: localStorage.getItem("role") || "",
     token: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : "",
-    isLoggedIn: false,
-    data: "",
-    role: ""
+    // isLoggedIn: false,
+    // data: "",
+    // role: ""
 
 }
 
@@ -104,7 +104,8 @@ const authSlice = createSlice({
                 state.token = action?.payload?.user?.tokens;
             })
             .addCase(logout.rejected, (state) => {
-                localStorage.setItem("isLoggedIn", false);
+                localStorage.clear();
+                // localStorage.setItem("isLoggedIn", false);
                 state.isLoggedIn = false;
                 state.token = null;
                 state.data = null;
@@ -118,12 +119,23 @@ const authSlice = createSlice({
             })
             .addCase(updateToken.fulfilled, (state, action) => {
                 // localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
-                localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
+                // localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
                 // localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
 
-                localStorage.setItem("token", action?.payload?.tokens ? JSON.stringify(action?.payload?.tokens) : "");
+                // localStorage.setItem("token", action?.payload?.tokens ? JSON.stringify(action?.payload?.tokens) : "");
+                // state.isLoggedIn = action?.payload?.success;
+                // state.token = action?.payload?.tokens;
+                
+                // modified
+                localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
+                localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
+                localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
+                localStorage.setItem("token", action?.payload?.user?.tokens ? JSON.stringify(action?.payload?.user?.tokens) : "");
+
                 state.isLoggedIn = action?.payload?.success;
-                state.token = action?.payload?.tokens;
+                state.data = action?.payload?.user;
+                state.role = action?.payload?.user?.role;
+                state.token = action?.payload?.user?.tokens;
             })
             .addCase(updateToken.rejected, (state) => {
                 localStorage.clear();

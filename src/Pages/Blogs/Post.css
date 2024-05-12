@@ -25,3 +25,12 @@ li{
 .post ul{
     @apply list-disc
 }
+.post blockquote p, .post blockquote footer{
+    @apply text-center
+}
+.post table tbody tr:first-child td{
+    @apply font-semibold;
+}
+.post table tbody tr td{
+    @apply border-gray-300 p-2 border-2;
+}

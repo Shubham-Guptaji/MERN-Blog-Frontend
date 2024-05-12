@@ -29,7 +29,7 @@ function App() {
           name="title"
           content="Alcodemy Blog - Blog For User and By User"
         />
-        <link rel="icon" type="image/x-icon" href="./Alcodemy.png" />
+        <meta name="keywords" content="Alcodemy, Alcodemy Post, alcodemy, alcodemy post, blog alcodemy, alcodemy blog, blog, post" />
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://blog.alcodemy.tech/" />

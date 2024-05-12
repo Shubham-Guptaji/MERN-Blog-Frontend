@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
   }, []);
   const [isOpen, setIsOpen] = useState(false);
   let isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-  let authId = useSelector(state => state?.auth?.data?.id);
+  // let authId = useSelector(state => state?.auth?.data?.id);
   const toggleMenu = () => setIsOpen(!isOpen);
   
   const navigationItems = [
@@ -29,9 +29,9 @@ const Layout = ({ children }) => {
     const res = await dispatch(logout());
     if(res?.payload?.success) navigate("/sign-in");
   }
-  if(isLoggedIn && !authId) {
-    logouthandler();
-  }
+  // if(isLoggedIn && !authId) {
+  //   logouthandler();
+  // }
 
   return (
     <div className="flex min-h-screen flex-col ">
@@ -54,7 +54,23 @@ const Layout = ({ children }) => {
               ))}
               <li className="text-base-200 hover:text-white cursor-pointer">
                 {isLoggedIn ? (
-                  <span onClick={logouthandler}>Logout</span>
+                  // <span onClick={logouthandler}>Logout</span>
+                  <>
+                  <button  onClick={()=>document.getElementById('my_modal_1').showModal()}>Logout</button>
+                  <dialog id="my_modal_1" className="modal">
+                    <div className="modal-box">
+                      <h3 className="font-bold text-lg text-indigo-700">Confirm Logout</h3>
+                      <p className="py-4 text-black">Are you sure you want to logout from your account now?</p>
+                      <div className="modal-action">
+                        <button className="btn" onClick={logouthandler}>Confirm</button>
+                        <form method="dialog">
+                          {/* if there is a button in form, it will close the modal */}
+                          <button className="btn">Close</button>
+                        </form>
+                      </div>
+                    </div>
+                  </dialog>
+                  </>
                 ) : (
                   <Link to="/sign-in">Sign In</Link>
                 )}
