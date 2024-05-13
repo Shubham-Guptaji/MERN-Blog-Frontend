@@ -89,12 +89,15 @@ const SignIn = () => {
           >
             Log In
           </button>
+          <div>
           <p className="mt-3 max-w-xs">
             Don&apos;t have an account ?&nbsp;{" "}
             <Link to={"/sign-up"} className="cursor-pointer text-indigo-500">
               Create Account
             </Link>
           </p>
+          <Link to="/forgot-password" className="cursor-pointer text-indigo-600 block text-center">Forgot Password</Link>
+          </div>
         </form>
       </div>
       </div>

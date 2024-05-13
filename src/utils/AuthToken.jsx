@@ -44,8 +44,8 @@ import { useNavigate } from "react-router-dom";
 
 import { updateToken } from "../Redux/authSlice";
 
-// const ACCESS_TOKEN_EXPIRES_TIME = 1000 * 60 * 10; // 10 min
-const ACCESS_TOKEN_EXPIRES_TIME = 1000 * 5; // 10 min
+const ACCESS_TOKEN_EXPIRES_TIME = 1000 * 60 * 10; // 10 min
+// const ACCESS_TOKEN_EXPIRES_TIME = 1000 * 5; // 10 min
 
 const AuthToken = ({ children }) => {
   const accessToken = useSelector((state) => state?.auth?.token?.accessToken) || null;

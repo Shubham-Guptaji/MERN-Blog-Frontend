@@ -1,10 +1,10 @@
 import Code from "@editorjs/code";
 import Delimiter from "@editorjs/delimiter";
 import EditorJS from "@editorjs/editorjs";
-import Embed from '@editorjs/embed';
+import Embed from "@editorjs/embed";
 import Header from "@editorjs/header";
 import Image from "@editorjs/image";
-import NestedList from "@editorjs/nested-list"; 
+import NestedList from "@editorjs/nested-list";
 import Paragraph from "@editorjs/paragraph";
 import Quote from "@editorjs/quote";
 import Raw from "@editorjs/raw";
@@ -12,6 +12,7 @@ import SimpleImage from "@editorjs/simple-image";
 import Table from "@editorjs/table";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { IoCloseSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -46,6 +47,10 @@ function Editor() {
   };
   const tagHandler = () => {
     if (tagValue == "") return;
+    if(postData.tags.length > 12) {
+      toast.error("Cannot add more than 12 tags.");
+      return;
+    }
     setPostData({
       ...postData,
       tags: [...postData.tags, tagValue],
@@ -88,7 +93,7 @@ function Editor() {
           class: NestedList,
           inlineToolbar: true,
           config: {
-            defaultStyle: "unordered", 
+            defaultStyle: "unordered",
           },
         },
         quote: Quote,
@@ -102,7 +107,7 @@ function Editor() {
                   throw new Error("Image upload failed");
                 }
                 let newId = response?.payload?.data?.id;
-                setResourceArr([...resourceArr, newId])
+                setResourceArr([...resourceArr, newId]);
                 return {
                   success: 1,
                   file: {
@@ -112,16 +117,16 @@ function Editor() {
               },
             },
           },
-        }, 
+        },
         simpleImage: SimpleImage,
         embed: {
           class: Embed,
           config: {
             services: {
               youtube: true,
-              coub: true
-            }
-          }
+              coub: true,
+            },
+          },
         },
         table: Table,
         delimiter: Delimiter,
@@ -183,21 +188,26 @@ function Editor() {
 
   return (
     <Layout>
-      
       <div className="container mx-auto px-2">
-        <h1 className="text-3xl lg:text-5xl font-bold text-center text-indigo-600 mt-5">Alcodemy POST Editor</h1>
+        <h1 className="mt-5 text-center text-3xl font-bold text-indigo-600 lg:text-5xl">
+          Alcodemy POST Editor
+        </h1>
         <input
           type="text"
           name="title"
           value={postData.title}
-          className="mt-8 w-full border-none px-1 py-3 text-center text-3xl outline-none mb-5"
+          className="mb-5 mt-8 w-full border-none px-1 py-3 text-center text-3xl outline-none"
           onChange={dataHandler}
           placeholder="Enter Post Title"
         />
-        {!data && <p className=" text-xl mb-3 text-gray-700 max-w-7xl mx-auto">Main Post Content in Box. Click Inside</p>}
+        {!data && (
+          <p className=" mx-auto mb-3 max-w-7xl text-xl text-gray-700">
+            Main Post Content in Box. Click Inside
+          </p>
+        )}
         <div
           ref={editorHolder}
-          className="editor-container mb-8 border-2 border-indigo-700 max-w-7xl mx-auto py-4"
+          className="editor-container mx-auto mb-8 max-w-7xl border-2 border-indigo-700 py-4"
           id="editorjs"
         />
       </div>
@@ -283,15 +293,24 @@ function Editor() {
               </button>
             </div>
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-4 mt-3">
+
             {postData.tags.map((element) => {
               return (
-                <span
-                  key={element}
-                  className="rounded-full p-3 pb-2 pt-2 text-center text-indigo-600 ring-2 "
-                >
-                  {element}
-                </span>
+                <div className="indicator" 
+                key={element}>
+                  <span className="badge indicator-item badge-primary cursor-pointer" onClick={() => {
+                    setPostData({
+                      ...postData,
+                      tags: postData.tags.filter((item) => item !== element),
+                    });
+                  }}><IoCloseSharp /></span>
+                  <span
+                    className="rounded-full p-3 pb-2 pt-2 text-center text-indigo-600 ring-2 grid place-items-center"
+                  >
+                    {element}
+                  </span>
+                </div>
               );
             })}
           </div>

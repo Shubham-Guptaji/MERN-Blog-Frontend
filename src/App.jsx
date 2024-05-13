@@ -8,9 +8,11 @@ import Create from "./Pages/Blogs/Create";
 import Post from "./Pages/Blogs/Post";
 import Contact from "./Pages/Contact";
 import Denied from "./Pages/Denied";
+import ForgotPassword from "./Pages/ForgotPassword";
 import HomePage from "./Pages/HomePage";
 import NotFound from "./Pages/NotFound";
 import { PrivacyPolicy } from "./Pages/Privacy-Policy";
+import ResetPassword from "./Pages/ResetPassword";
 import SignIn from "./Pages/Sign-in";
 import SignUp from "./Pages/Sign-up";
 import TotalPosts from "./Pages/TotalPosts";
@@ -66,6 +68,7 @@ function App() {
         <Route path="/posts" element={<TotalPosts />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/about" element={<About />} />
         <Route path="/denied" element={<Denied />} />
 
@@ -74,6 +77,7 @@ function App() {
         <Route element={<NotRequireAuth />} >
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
         
         <Route element={<RequireAuth allowedRoles={["user", "admin"]}/>} >
