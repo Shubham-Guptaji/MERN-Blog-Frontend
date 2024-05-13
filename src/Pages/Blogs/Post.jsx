@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link,useNavigate, useParams } from "react-router-dom";
 import {
   EmailIcon,
   EmailShareButton,
@@ -24,7 +24,7 @@ import {
 
 import Layout from "../../Layout/Layout";
 import { getPost } from "../../Redux/blogSlice";
-import { DisLikeHandler, LikeHandler, PostLike } from "../../Redux/Miscellaneous";
+import { DisLikeHandler, Follow, IsFollowing, LikeHandler, PostLike, UnFollow } from "../../Redux/Miscellaneous";
 const Post = () => {
   const url = useParams().url;
   const userId = useSelector((state) => state?.auth?.data?.id);
@@ -33,6 +33,8 @@ const Post = () => {
   const navigate = useNavigate();
   const likes = useSelector(state => state?.misc?.postLikes);
   const isLiked = useSelector(state => state?.misc?.isLiked);
+  const followId = useSelector(state => state?.misc?.followId);
+  const isFollowing = useSelector(state => state?.misc?.isFollowing);
   const { postDetails, comments } = useSelector(
     (state) => state?.blog?.currentPost
   );
@@ -62,13 +64,25 @@ const Post = () => {
     if (!url) return navigate("/posts");
     PostHandler(url);
   }, []);
+
+  const followHandler = async () => {
+    if(!isLoggedIn) return toast.error("Login to follow..");
+    dispatch(Follow({authId: postDetails?.author?._id, blogId: postDetails?._id}));
+  }
+  const unfollowHandler = async () => {
+    if(!isLoggedIn || !followId) return toast.error("You should be loggedin with followId.");
+    dispatch(UnFollow({FollowId : followId}));
+  }
+
   const PostHandler = async () => {
     const response = await dispatch(getPost({url, userId}));
     if (!response?.payload?.success) {
       navigate("/not-found");
     }
     let data = {postId: response?.payload?.postDetails?._id, userId};
-    await dispatch(PostLike(data));
+    dispatch(PostLike(data));
+    const authId = response?.payload?.postDetails?.author?._id;
+    if(isLoggedIn && authId) dispatch(IsFollowing({authId}));
   };
 
   const postConfig = {
@@ -156,7 +170,9 @@ const Post = () => {
             <img
               src={postDetails.public_image.resource_url}
               alt={postDetails.title}
-              className="my-4 rounded-xl p-2"
+              className="my-4 rounded-xl p-2 mx-auto w-full h-auto"
+              width="1920"
+              height="1080"
             />
           )}
 
@@ -216,6 +232,27 @@ const Post = () => {
             </span>
             <span>{likes}</span>
           </div>
+
+          {/* About Author  */}
+
+          <div className="flex sm:flex-row flex-col mt-16 justify-between bg-gray-100 rounded p-2 sm:p-4">
+              <div className="sm:max-w-md">
+                <Link to={`/username/${postDetails?.author?.username}`}><img src={postDetails?.author?.avatar?.secure_url} alt={postDetails?.author?.username}  className="w-20 h-20 rounded-full bg-gray-500  border-2"/></Link>
+                <Link to={`/username/${postDetails?.author?.username}`}><h2 className="text-xl sm:text-2xl font-semibold my-2">Post Author {postDetails?.author?.firstName + " " + postDetails?.author?.lastName}</h2></Link>
+                <span className="font-semibold">{postDetails?.author?.followers} {postDetails?.author?.followers > 1 ? "Followers" : "Follower"}</span>
+                <p className="text-justify mt-3">{postDetails?.author?.bio}</p>
+              </div>
+              <div className="px-2 ">
+                {!isFollowing ? (<button className="btn btn-primary mt-3" onClick={followHandler}>
+                  Follow
+                </button>) : (
+                  <button className="btn hover:btn-primary-content mt-3" onClick={unfollowHandler}>
+                    Following
+                  </button>
+                )}
+              </div>
+          </div>
+
         </div>
       </div>
     </Layout>
