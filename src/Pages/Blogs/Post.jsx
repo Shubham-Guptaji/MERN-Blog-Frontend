@@ -35,6 +35,7 @@ import {
   UnFollow,
 } from "../../Redux/Miscellaneous";
 import CommentCard from "./PostComponents/CommentCard";
+import PostCard from "./PostComponents/PostCard";
 const Post = () => {
   const url = useParams().url;
   const userId = useSelector((state) => state?.auth?.data?.id);
@@ -46,6 +47,7 @@ const Post = () => {
   const followId = useSelector((state) => state?.misc?.followId);
   const isFollowing = useSelector((state) => state?.misc?.isFollowing);
   const postComments = useSelector((state) => state?.comment?.comments);
+  const recentPosts = useSelector((state) => state?.blog?.currentPost?.recentPosts);
   const [newComment, setNewComment] = useState("");
   const { postDetails } = useSelector((state) => state?.blog?.currentPost);
   let postData;
@@ -67,7 +69,7 @@ const Post = () => {
   useEffect(() => {
     if (!url) return navigate("/posts");
     PostHandler(url);
-  }, []);
+  }, [url]);
 
   const followHandler = async () => {
     if (!isLoggedIn) return toast.error("Login to follow..");
@@ -324,6 +326,16 @@ const Post = () => {
               {postComments?.map((comment) => (
                 <CommentCard key={comment._id} comment={comment} postDetails={postDetails} />
                 ))}
+            </div>
+            <hr className="mt-8"/>
+            <div className="mt-8">
+              <h4 className="text-xl sm:text-3xl font-semibold text-indigo-600">Posts you may like</h4>
+              {console.log(recentPosts)}
+              <div className="flex flex-wrap justify-center gap-5 mt-6">
+                {recentPosts?.map((post) => (
+                  <PostCard key={post._id} post={post} />  
+                ))}
+              </div>
             </div>
           </div>
         </div>

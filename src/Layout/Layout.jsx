@@ -44,7 +44,7 @@ const Layout = ({ children }) => {
             </div>
 
             {/* Navigation links (desktop) */}
-            <ul className="hidden items-center space-x-5 font-serif text-xl md:flex ">
+            <ul className="hidden items-center space-x-3 lg:space-x-5 font-serif text-xl md:flex ">
               {navigationItems.map((item) => (
                 <li key={item.name} className="text-base-200 hover:text-white">
                   <Link to={item.to} className="font-medium">

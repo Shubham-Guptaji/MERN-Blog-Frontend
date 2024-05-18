@@ -62,6 +62,7 @@ export const logout = createAsyncThunk("/logout", async () => {
         return res.data;
     } catch (error) {
         toast.error(error.response.data.message);
+        throw error;
     }
 });
 
@@ -138,6 +139,7 @@ const authSlice = createSlice({
                 state.token = action?.payload?.user?.tokens;
             })
             .addCase(updateToken.rejected, (state) => {
+                console.log('rejected');
                 localStorage.clear();
                 state.token = null;
                 state.data = null;

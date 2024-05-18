@@ -43,7 +43,7 @@ const CommentCard = ({ comment, postDetails }) => {
           {comment?.commentAuthor?.fullName}
         </h4>
         </Link>
-        {(postDetails?.author?._id == userId || role == "admin") && (
+        {(comment?.commentAuthor?.id == userId || role == "admin") && (
           <div className="ms-auto flex items-center gap-2">
             {!commentedit ? (
               <MdModeEdit

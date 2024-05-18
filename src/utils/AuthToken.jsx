@@ -64,7 +64,8 @@ const AuthToken = ({ children }) => {
 
   useEffect(() => {
     if (refreshToken) {
-      if (!isFirstMounted) updateTokenfn();
+      // if (!isFirstMounted) updateTokenfn();
+      if (isFirstMounted) updateTokenfn();
       const intervalId = setInterval(() => updateTokenfn(), ACCESS_TOKEN_EXPIRES_TIME);
       return () => clearInterval(intervalId);
     }
