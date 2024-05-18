@@ -12,7 +12,7 @@ const initialState = {
     keywords: [],
     currentPost : {
         postDetails : {},
-        comments : {},
+        // comments : {},
     }
 }
 
@@ -117,7 +117,7 @@ const blogSlice = createSlice({
             .addCase(getPost.fulfilled, (state, action) => {
                 if(action.payload){
                     state.currentPost.postDetails = action.payload.postDetails;
-                    state.currentPost.comments = action.payload.comments;
+                    // state.currentPost.comments = action.payload.comments;
                 }
             })
     },

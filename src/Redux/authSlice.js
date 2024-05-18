@@ -139,9 +139,9 @@ const authSlice = createSlice({
             })
             .addCase(updateToken.rejected, (state) => {
                 localStorage.clear();
-                state.isLoggedIn = false;
                 state.token = null;
                 state.data = null;
+                state.isLoggedIn = false;
                 window.location.href = "https://blog.alcodemy.tech";
             })
     }
