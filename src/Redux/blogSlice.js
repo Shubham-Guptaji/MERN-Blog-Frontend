@@ -86,6 +86,48 @@ export const searchTag = createAsyncThunk("/all-posts/search", async (data) => {
     }
 })
 
+// function to unpublish using the patch request;
+export const unPublishPost = createAsyncThunk("/unpublish", async (data) => {
+    try {
+        const res = axiosInstance.patch(`/blogs/${data.id}`);
+        const response = await res;
+        return response?.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
+
+// function to publish using the patch request;
+export const publishPost = createAsyncThunk("/publish", async (data) => {
+    try {
+        const res = axiosInstance.patch(`/blogs/publish/${data.id}`);
+        const response = await res;
+        return response?.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
+
+// function to publish using the patch request;
+export const deletePost = createAsyncThunk("/delete-post", async (data) => {
+    try {
+        const res = axiosInstance.delete(`/blogs/${data.id}`, data);
+        toast.promise(res, {
+            loading: "Deleting the post...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to delete the Post",
+        });
+        const response = await res;
+        return response?.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
+
+
+
 // Slice for Blog Api
 
 const blogSlice = createSlice({

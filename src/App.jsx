@@ -7,6 +7,9 @@ import About from "./Pages/About";
 import Create from "./Pages/Blogs/Create";
 import Post from "./Pages/Blogs/Post";
 import Contact from "./Pages/Contact";
+import AllPost from "./Pages/Dashboard/AllPost";
+import Dash from "./Pages/Dashboard/Dash";
+import DashLayout from "./Pages/Dashboard/DashLayout";
 import Denied from "./Pages/Denied";
 import ForgotPassword from "./Pages/ForgotPassword";
 import HomePage from "./Pages/HomePage";
@@ -82,6 +85,8 @@ function App() {
         
         <Route element={<RequireAuth allowedRoles={["user", "admin"]}/>} >
           <Route path="/create" element={<Create />} />
+          <Route path="/dashboard" element={<DashLayout />} />
+          {/* <Route path="/dashboard/my-posts" element={<AllPost />} /> */}
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

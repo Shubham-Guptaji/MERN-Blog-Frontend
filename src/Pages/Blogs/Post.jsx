@@ -330,7 +330,6 @@ const Post = () => {
             <hr className="mt-8"/>
             <div className="mt-8">
               <h4 className="text-xl sm:text-3xl font-semibold text-indigo-600">Posts you may like</h4>
-              {console.log(recentPosts)}
               <div className="flex flex-wrap justify-center gap-5 mt-6">
                 {recentPosts?.map((post) => (
                   <PostCard key={post._id} post={post} />  

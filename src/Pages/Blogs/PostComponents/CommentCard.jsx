@@ -64,7 +64,7 @@ const CommentCard = ({ comment, postDetails }) => {
         )}
       </div>
       {!commentedit ? (
-        <p className="mt-2 px-2 text-lg text-gray-800">{commentData}</p>
+        <p className="mt-2 px-2 text-base text-gray-800">{commentData}</p>
       ) : (
         <textarea
           className="mt-3 h-24 w-full rounded-md border-2 border-indigo-600 p-2"

@@ -11,7 +11,12 @@ const initialState = {
     // isLoggedIn: false,
     // data: "",
     // role: ""
-
+    profile: {
+        areMore: false,
+        isAuthor: false,
+        data: {},
+        chartData: null
+    }
 }
 
 export const createAccount = createAsyncThunk("/sign-up", async (data) => {
@@ -66,6 +71,42 @@ export const logout = createAsyncThunk("/logout", async () => {
     }
 });
 
+export const fetchDash = createAsyncThunk("/dash", async (data) => {
+    try {
+        let res = axiosInstance.post(`/user/profile/${data.username}`, data.obj);
+        toast.promise(res, {
+            loading: "Fetching your dashboard profile",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to fetch the profile"
+        });
+        res = await res;
+        return res?.data;
+    } catch ( error ) {
+        toast.error(error.response.data.message);
+        throw error;
+    }
+})
+
+export const fetchChartData = createAsyncThunk("/chart-data", async () => {
+    try {
+        let res = axiosInstance.get(`/user/profile/chartdata`);
+        toast.promise(res, {
+            loading: "Fetching your dashboard statistics",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to fetch the statistics"
+        });
+        res = await res;
+        return res?.data;
+    } catch ( error ) {
+        toast.error(error.response.data.message);
+        throw error;
+    }
+})
+
 export const updateToken = createAsyncThunk("/user/refresh-token", async () => {
     try {
         let res = await axiosInstance.post("/user/refresh-token");
@@ -74,6 +115,7 @@ export const updateToken = createAsyncThunk("/user/refresh-token", async () => {
         toast.error(error.response.data.message);
     }
 })
+
 
 const authSlice = createSlice({
     name: "auth",
@@ -145,6 +187,14 @@ const authSlice = createSlice({
                 state.data = null;
                 state.isLoggedIn = false;
                 window.location.href = "https://blog.alcodemy.tech";
+            })
+            .addCase(fetchDash.fulfilled, (state, action) => {
+                state.profile.areMore = action?.payload?.areMore;
+                state.profile.isAuthor = action?.payload?.isAuthor;
+                state.profile.data = action?.payload?.userDetails;
+            })
+            .addCase(fetchChartData.fulfilled, (state, action) => {
+                state.profile.chartData = action?.payload?.chartData;
             })
     }
 })
