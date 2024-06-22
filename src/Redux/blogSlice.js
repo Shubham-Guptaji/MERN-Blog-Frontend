@@ -34,7 +34,26 @@ export const createPost = createAsyncThunk("/", async (data) => {
     } catch (error) {
         toast.error(error?.response?.data?.message);
     }
-})
+});
+
+export const updatePost = createAsyncThunk("/update-post", async (allData) => {
+    try {
+        let res = axiosInstance.put(`/blogs/${allData.id}`, allData.data);
+        toast.promise(res, {
+            loading: "Updating...",
+            // success: (data) => {
+            //     return data?.data?.message;
+            // },
+            success: "Blog Post updated Successfully",
+            error: "Failed to update the Post",
+        });
+        res = await res;
+        return res.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+});
+
 
 // function to get all the home page blog posts
 export const getHomePagePosts = createAsyncThunk("/get", async () => {
@@ -125,6 +144,10 @@ export const deletePost = createAsyncThunk("/delete-post", async (data) => {
         toast.error(error?.response?.data?.message);
     }
 })
+
+
+
+
 
 
 

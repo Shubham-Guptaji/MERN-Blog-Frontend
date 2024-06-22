@@ -10,7 +10,7 @@ const AllPost = () => {
                 <h1 className="text-2xl lg:text-3xl font-semibold text-primary mb-5">All Blog Posts</h1>
             <div className="flex flex-col gap-3">
             {
-                data.length && data?.map((post) => <PostCard key={post._id} post={post} />)
+                data && data.length && data?.map((post) => <PostCard key={post._id} post={post} />)
             }
             </div>
             </>

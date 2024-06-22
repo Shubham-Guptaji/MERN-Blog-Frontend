@@ -1,14 +1,14 @@
 import { Helmet } from "react-helmet";
 import { Route, Routes } from "react-router-dom";
 
+// import Create from "../../blog-client post/Create";
+// import UpdatePost from "../../blog-client post/Update";
 import NotRequireAuth from "./Components/Auth/NotRequireAuth";
 import RequireAuth from "./Components/Auth/RequireAuth";
 import About from "./Pages/About";
-import Create from "./Pages/Blogs/Create";
 import Post from "./Pages/Blogs/Post";
+import PostEditor from "./Pages/Blogs/PostCreateAndUpdate";
 import Contact from "./Pages/Contact";
-import AllPost from "./Pages/Dashboard/AllPost";
-import Dash from "./Pages/Dashboard/Dash";
 import DashLayout from "./Pages/Dashboard/DashLayout";
 import Denied from "./Pages/Denied";
 import ForgotPassword from "./Pages/ForgotPassword";
@@ -84,9 +84,11 @@ function App() {
         </Route>
         
         <Route element={<RequireAuth allowedRoles={["user", "admin"]}/>} >
-          <Route path="/create" element={<Create />} />
+          {/* <Route path="/create" element={<Create />} /> */}
           <Route path="/dashboard" element={<DashLayout />} />
-          {/* <Route path="/dashboard/my-posts" element={<AllPost />} /> */}
+          {/* <Route path="/update" element={<UpdatePost />} /> */}
+          <Route path="/create" element={<PostEditor />} />
+          <Route path="/update" element={<PostEditor />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

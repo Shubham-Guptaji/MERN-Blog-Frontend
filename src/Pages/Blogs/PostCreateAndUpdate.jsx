@@ -14,65 +14,35 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { IoCloseSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import UploadImg from "../../assets/undraw_add_files_re_v09g.svg";
 import Layout from "../../Layout/Layout";
-import { createPost } from "../../Redux/blogSlice";
+import { createPost, updatePost } from "../../Redux/blogSlice";
 import { BlogResource, ResourceUpload } from "../../Redux/resourceSlice";
 
-function Editor() {
+function PostEditor() {
   const editorHolder = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isMounted, setIsMounted] = useState(true);
+  const location = useLocation();
+  const { post } = location.state || {};
   const [resourceArr, setResourceArr] = useState([]);
   const [postData, setPostData] = useState({
-    title: "",
-    content: "",
-    tags: [],
-    seoKeywords: "",
-    metaDescription: "",
-    url: "",
-    postImage: undefined,
+    id: post ? post._id : null,
+    title: post ? post.title : "",
+    content: post ? post.content : "",
+    tags: post ? post.tags : [],
+    seoKeywords: post ? post.seoKeywords : "",
+    metaDescription: post ? post.metaDescription : "",
+    url: post ? post.url : "",
+    postImage: post ? undefined : null,
     authorId: useSelector((state) => state?.auth?.data?.id),
   });
   const [previewImage, setPreviewImage] = useState("");
-  const dispatch = useDispatch();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(post ? post.content : null);
   const [tagValue, setTagValue] = useState("");
-  const dataHandler = (event) => {
-    setPostData({
-      ...postData,
-      [event.target.name]: event.target.value,
-    });
-  };
-  const tagHandler = () => {
-    if (tagValue == "") return;
-    if(postData.tags.length > 12) {
-      toast.error("Cannot add more than 12 tags.");
-      return;
-    }
-    setPostData({
-      ...postData,
-      tags: [...postData.tags, tagValue],
-    });
-    setTagValue("");
-  };
-
-  const getImage = (event) => {
-    event.preventDefault();
-    const uploadedImage = event.target.files[0];
-    if (uploadedImage) {
-      setPostData({
-        ...postData,
-        postImage: uploadedImage,
-      });
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(uploadedImage);
-      fileReader.addEventListener("load", function () {
-        setPreviewImage(this.result);
-      });
-    }
-  };
 
   useEffect(() => {
     const editor = new EditorJS({
@@ -86,9 +56,7 @@ function Editor() {
             defaultLevel: 3,
           },
         },
-        paragraph: {
-          class: Paragraph,
-        },
+        paragraph: Paragraph,
         list: {
           class: NestedList,
           inlineToolbar: true,
@@ -133,17 +101,72 @@ function Editor() {
         code: Code,
         raw: Raw,
       },
-      onReady: () => {
+      onReady: async () => {
         console.log("Editor.js is ready");
+        if (data && isMounted) {
+          editor.render(JSON.parse(data));
+          setData(await editor.save());
+          setIsMounted(false);
+        }
       },
-      // onChange: async (savedData) => {
       onChange: async () => {
         setData(await editor.save());
       },
     });
-  }, []);
-  const postHandler = async (events) => {
-    events.preventDefault();
+
+    if (post && post.public_image?.resource_url) {
+      manageImg(post.public_image.resource_url);
+    }
+  }, [ post]);
+
+  async function manageImg(imageUrl) {
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error("Failed to fetch image");
+    }
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    setPreviewImage(url);
+  }
+
+  const dataHandler = (event) => {
+    setPostData({
+      ...postData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const tagHandler = () => {
+    if (tagValue === "") return;
+    if (postData.tags.length > 12) {
+      toast.error("Cannot add more than 12 tags.");
+      return;
+    }
+    setPostData({
+      ...postData,
+      tags: [...postData.tags, tagValue],
+    });
+    setTagValue("");
+  };
+
+  const getImage = (event) => {
+    event.preventDefault();
+    const uploadedImage = event.target.files[0];
+    if (uploadedImage) {
+      setPostData({
+        ...postData,
+        postImage: uploadedImage,
+      });
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(uploadedImage);
+      fileReader.addEventListener("load", function () {
+        setPreviewImage(this.result);
+      });
+    }
+  };
+
+  const postHandler = async (event) => {
+    event.preventDefault();
     if (data) postData.content = data;
     if (
       !postData.title ||
@@ -152,11 +175,12 @@ function Editor() {
       !postData.seoKeywords ||
       !postData.metaDescription ||
       !postData.url ||
-      !postData.postImage
+      (!postData.postImage && !post)
     ) {
       toast.error("All fields are mandatory!!");
       return;
     }
+
     const formData = new FormData();
     formData.append("title", postData.title);
     formData.append("content", JSON.stringify(postData.content));
@@ -167,12 +191,20 @@ function Editor() {
     formData.append("postImage", postData.postImage);
     formData.append("authorId", postData.authorId);
 
-    const response = await dispatch(createPost(formData));
+    let response;
+    if (post) {
+      let allData = { data: formData, id: postData.id };
+      response = await dispatch(updatePost(allData));
+    } else {
+      response = await dispatch(createPost(formData));
+    }
+
     if (response?.payload?.success) {
-      let data = {};
-      data.id = response?.payload?.newBlog?._id;
-      data.resources = resourceArr;
-      await dispatch(BlogResource(data));
+      let blogData = {
+        id: response.payload.newBlog ? response.payload.newBlog._id : postData.id,
+        resources: resourceArr,
+      };
+      await dispatch(BlogResource(blogData));
       setPostData({
         title: "",
         content: "",
@@ -201,13 +233,13 @@ function Editor() {
           placeholder="Enter Post Title"
         />
         {!data && (
-          <p className=" mx-auto mb-3 max-w-7xl text-xl text-gray-700">
+          <p className="mx-auto mb-3 max-w-7xl text-xl text-gray-700">
             Main Post Content in Box. Click Inside
           </p>
         )}
         <div
           ref={editorHolder}
-          className="editor-container mx-auto mb-8 max-w-7xl border-2 border-indigo-700 py-4"
+          className="editor-container mx-auto mb-8 max-w-7xl border-2 border-indigo-700 py-4 lg:px-0 md:px-20 sm:px-14 px-3"
           id="editorjs"
         />
       </div>
@@ -225,7 +257,7 @@ function Editor() {
           <label className="mb-5 cursor-pointer" htmlFor="image_uploads">
             {previewImage ? (
               <img
-                className="m-auto h-auto w-full  max-w-5xl"
+                className="m-auto h-auto w-full max-w-5xl"
                 src={previewImage}
                 alt="preview image"
               />
@@ -245,7 +277,7 @@ function Editor() {
             accept=".jpg, .jpeg, .png"
           />
 
-          <label className="form-control w-full ">
+          <label className="form-control w-full">
             <div className="label">
               <span className="text-xl">Post Description</span>
             </div>
@@ -257,21 +289,21 @@ function Editor() {
               onChange={dataHandler}
             ></textarea>
           </label>
-          <label className="form-control w-full ">
+          <label className="form-control w-full">
             <div className="label">
               <span className="text-xl">Seo Keywords</span>
             </div>
             <input
               type="text"
               placeholder="Seo Keywords separated by comma"
-              className="input input-bordered w-full "
+              className="input input-bordered w-full"
               name="seoKeywords"
               value={postData.seoKeywords}
               onChange={dataHandler}
             />
           </label>
 
-          <label className="form-control w-full ">
+          <label className="form-control w-full">
             <div className="label">
               <span className="text-xl">Tags</span>
             </div>
@@ -279,7 +311,7 @@ function Editor() {
               <input
                 type="text"
                 placeholder="Add Tag Here"
-                className="input input-bordered w-full "
+                className="input input-bordered w-full"
                 name="tags"
                 value={tagValue}
                 onChange={(events) => setTagValue(events.target.value)}
@@ -293,45 +325,53 @@ function Editor() {
               </button>
             </div>
           </label>
-          <div className="flex flex-wrap gap-4 mt-3">
-
-            {postData.tags.map((element) => {
-              return (
-                <div className="indicator" 
-                key={element}>
-                  <span className="badge indicator-item badge-primary cursor-pointer" onClick={() => {
+          <div className="mt-3 flex flex-wrap gap-4">
+            {postData.tags.map((element) => (
+              <div className="indicator" key={element}>
+                <span
+                  className="badge indicator-item badge-primary cursor-pointer"
+                  onClick={() => {
                     setPostData({
                       ...postData,
                       tags: postData.tags.filter((item) => item !== element),
                     });
-                  }}><IoCloseSharp /></span>
-                  <span
-                    className="rounded-full p-3 pb-2 pt-2 text-center text-indigo-600 ring-2 grid place-items-center"
-                  >
-                    {element}
-                  </span>
-                </div>
-              );
-            })}
+                  }}
+                >
+                  <IoCloseSharp />
+                </span>
+                <span className="grid place-items-center rounded-full p-3 pb-2 pt-2 text-center text-indigo-600 ring-2">
+                  {element}
+                </span>
+              </div>
+            ))}
           </div>
-          <label className="form-control w-full ">
+          <label className="form-control w-full">
             <div className="label">
               <span className="text-xl">Site Url</span>
             </div>
-            <input
-              type="text"
-              placeholder="Enter your unique url"
-              className="input input-bordered w-full "
-              name="url"
-              value={postData.url}
-              onChange={dataHandler}
-            />
+            {post ? (
+              <p
+                className="px-3 py-4 rounded-md border-2 text-md w-full "
+                onClick={() => toast.error("Can't change Post Url.")}
+              >
+                {postData.url}
+              </p>
+            ) : (
+              <input
+                type="text"
+                placeholder="Enter your unique url"
+                className="input input-bordered w-full"
+                name="url"
+                value={postData.url}
+                onChange={dataHandler}
+              />
+            )}
           </label>
           <button
             className="btn btn-primary mx-auto mb-5 mt-8 w-full max-w-xs"
             type="submit"
           >
-            Post
+            {post ? "Update Post" : "Post"}
           </button>
         </form>
       </div>
@@ -339,4 +379,4 @@ function Editor() {
   );
 }
 
-export default Editor;
+export default PostEditor;
