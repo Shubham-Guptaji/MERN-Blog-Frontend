@@ -1,5 +1,6 @@
 // import React from "react";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,6 +14,7 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  const isVerified = useSelector(state => state.auth?.data?.isVerified);
   useEffect(() => {
     dispatch(getHomePagePosts());
   }, []);
@@ -32,7 +34,7 @@ const HomePage = () => {
               Explore narratives, ideas, and knowledge shared by authors across
               diverse topics.
             </p>
-            <button className="btn btn-primary mt-5 bg-indigo-700 text-xl md:mt-3 lg:mt-5 lg:tracking-wider xl:mt-9" onClick={()=> isLoggedIn ? Navigate("/create") : Navigate("/sign-up")}>
+            <button className="btn btn-primary mt-5 bg-indigo-700 text-xl md:mt-3 lg:mt-5 lg:tracking-wider xl:mt-9" onClick={()=> !isLoggedIn ? Navigate("/sign-up") : isVerified ? Navigate("/create") : toast.error("Please verify your account from your dashboard.")}>
               Create Own
             </button>
           </div>

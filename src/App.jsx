@@ -19,6 +19,7 @@ import ResetPassword from "./Pages/ResetPassword";
 import SignIn from "./Pages/Sign-in";
 import SignUp from "./Pages/Sign-up";
 import TotalPosts from "./Pages/TotalPosts";
+import VerifyAccount from "./Pages/VerifyAccount";
 import AuthToken from "./utils/AuthToken";
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/user/:username/account/verify/:token" element={<VerifyAccount />} />
         <Route path="/about" element={<About />} />
         <Route path="/denied" element={<Denied />} />
 
@@ -89,6 +91,7 @@ function App() {
           {/* <Route path="/update" element={<UpdatePost />} /> */}
           <Route path="/create" element={<PostEditor />} />
           <Route path="/update" element={<PostEditor />} />
+          
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

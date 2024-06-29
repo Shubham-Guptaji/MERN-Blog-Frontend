@@ -40,6 +40,7 @@ const Post = () => {
   const url = useParams().url;
   const userId = useSelector((state) => state?.auth?.data?.id);
   const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
+  const isVerified = useSelector((state) => state?.auth?.data?.isVerified);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const likes = useSelector((state) => state?.misc?.postLikes);
@@ -73,6 +74,7 @@ const Post = () => {
 
   const followHandler = async () => {
     if (!isLoggedIn) return toast.error("Login to follow..");
+    if (!isVerified) return toast.error("Your account isn't verified yet");
     dispatch(
       Follow({ authId: postDetails?.author?._id, blogId: postDetails?._id })
     );

@@ -15,7 +15,8 @@ const initialState = {
         areMore: false,
         isAuthor: false,
         data: {},
-        chartData: null
+        chartData: null,
+        dashPostPage: 0
     }
 }
 
@@ -76,10 +77,45 @@ export const fetchDash = createAsyncThunk("/dash", async (data) => {
         let res = axiosInstance.post(`/user/profile/${data.username}`, data.obj);
         toast.promise(res, {
             loading: "Fetching your dashboard profile",
-            success: (data) => {
-                return data?.data?.message;
+            success: (response) => {
+                return data?.obj?.skip == undefined ? response?.data?.message : "Posts fetched successfully";
             },
             error: "Failed to fetch the profile"
+        });
+        res = await res;
+        return res?.data;
+    } catch ( error ) {
+        toast.error(error.response.data.message);
+        throw error;
+    }
+})
+
+export const SendVerifyMail = createAsyncThunk("/verify-mail", async () => {
+    try {
+        let res = axiosInstance.post(`/user/verify`);
+        toast.promise(res, {
+            loading: "Sending the verification Email",
+            success: (response) => {
+                return response?.data?.message
+            },
+            error: "Failed to send the verification Email"
+        });
+        return res?.data;
+    } catch ( error ) {
+        toast.error(error.response.data.message);
+        throw error;
+    }
+})
+
+export const VerifyTokenAccount = createAsyncThunk("/verify-account-token", async (data) => {
+    try {
+        let res = axiosInstance.patch(`/user/profile/${data.username}/verify/${data.token}`);
+        toast.promise(res, {
+            loading: "Verification in process",
+            success: (response) => {
+                return response?.data?.message
+            },
+            error: "Failed to Verify your account"
         });
         res = await res;
         return res?.data;
@@ -192,6 +228,7 @@ const authSlice = createSlice({
                 state.profile.areMore = action?.payload?.areMore;
                 state.profile.isAuthor = action?.payload?.isAuthor;
                 state.profile.data = action?.payload?.userDetails;
+                state.profile.dashPostPage = Math.floor(action?.payload?.userDetails?.skip / 20);
             })
             .addCase(fetchChartData.fulfilled, (state, action) => {
                 state.profile.chartData = action?.payload?.chartData;

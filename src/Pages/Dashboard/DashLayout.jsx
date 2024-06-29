@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { FaFileAlt, FaUserEdit } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
@@ -14,8 +15,9 @@ import AllPost from "./AllPost";
 import Dash from "./Dash";
 
 const DashLayout = () => {
-  const {username} = useSelector((state) => state?.auth?.data);
+  const {username, isVerified} = useSelector((state) => state?.auth?.data);
   const [currentPage, setCurrentPage] = useState(1);
+  const [subNavState, setSubNavState] = useState(true);
   const dispatch = useDispatch();
   const hideDrawer = () => {
     const element = document.getElementsByClassName("drawer-toggle");
@@ -24,12 +26,14 @@ const DashLayout = () => {
     // collapsing the drawer-side width to zero
     const drawerSide = document.getElementsByClassName("drawer-side");
     drawerSide[0].style.width = 0;
+    setSubNavState(false);
   };
 
   // function for changing the drawer width on menu button click
   const changeWidth = () => {
     const drawerSide = document.getElementsByClassName("drawer-side");
     drawerSide[0].style.width = "auto";
+    setSubNavState(true);
   };
   const arr = [0, Dash, 0, AllPost];
   const ComponentData = arr[currentPage];
@@ -41,7 +45,8 @@ const DashLayout = () => {
     <Layout>
       <div className="container mx-auto lg:mt-3 mb-3 px-3 md:w-10/12">
         <div className=" mb-8 lg:flex flex-col gap-3 lg:my-5 sm:flex-row">
-        <div className="drawer z-30 bg-primary lg:hidden sticky top-12 md:top-[60px]">
+        {/* <div className="drawer z-30 bg-primary lg:hidden sticky top-12 md:top-[60px]"> */}
+        <div className={`drawer ${subNavState ? "z-30" : "z-10" } md:z-30 bg-primary lg:hidden sticky top-12 md:top-[60px]`}>
               <input id="my-drawer" type="checkbox" className="drawer-toggle" />
               <div className="drawer-content me-auto bg-primary block z-0 px-3 py-1 ">
                 <label htmlFor="my-drawer" className="flex items-center gap-2 relative cursor-pointer">
@@ -264,9 +269,9 @@ const DashLayout = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/create" className="text-base font-semibold">
+                      {isVerified ? (<Link to="/create" className="text-base font-semibold">
                         <FaUserEdit className="h-6 w-6" /> Create New Post
-                      </Link>
+                      </Link>) : (<button className="text-base font-semibold" onClick={() => toast.error("Verify your account to create the post")}><FaUserEdit className="h-6 w-6" /> Create New Post</button>)}
                     </li>
                     <li>
                       <Link
