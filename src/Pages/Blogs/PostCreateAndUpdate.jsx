@@ -32,7 +32,8 @@ function PostEditor() {
   const [postData, setPostData] = useState({
     id: post ? post._id : null,
     title: post ? post.title : "",
-    content: post ? post.content : "",
+    content: post ? JSON.parse(post.content) : "",
+    // content: post ? post.content : "",
     tags: post ? post.tags : [],
     seoKeywords: post ? post.seoKeywords : "",
     metaDescription: post ? post.metaDescription : "",
@@ -104,7 +105,7 @@ function PostEditor() {
       onReady: async () => {
         console.log("Editor.js is ready");
         if (data && isMounted) {
-          editor.render(JSON.parse(data));
+          await editor.render(JSON.parse(data));
           setData(await editor.save());
           setIsMounted(false);
         }

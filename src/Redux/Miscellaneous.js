@@ -7,7 +7,9 @@ const initialState = {
     postLikes: null,
     isLiked : null,
     isFollowing: null,
-    followId: null
+    followId: null,
+    followers: null,
+    meFollow: null,
 }
 
 export const PostLike = createAsyncThunk("/likecount", async (data) => {
@@ -105,6 +107,41 @@ export const UnFollow = createAsyncThunk("/unfollow", async (data) => {
     }
 });
 
+export const myFollowers = createAsyncThunk("/my-followers", async (data) => {
+    try {
+        let skip = data?.skip || 0;
+        let res = axiosInstance.get(`/followers?skip=${skip}`);
+        toast.promise(res, {
+            loading: "Getting your followers",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to get the followers"
+        });
+        res = await res;
+        return res?.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
+
+export const meFollowing = createAsyncThunk("/me-following", async (data) => {
+    try {
+        let skip = data?.skip || 0;
+        let res = axiosInstance.get(`/following?skip=${skip}`);
+        toast.promise(res, {
+            loading: "Getting your followed Authors",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to get the followed Authors."
+        });
+        res = await res;
+        return res?.data;
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
 
 const miscSlice = createSlice({
     name: "misc",
@@ -136,6 +173,12 @@ const miscSlice = createSlice({
             .addCase(UnFollow.fulfilled, (state) => {
                 state.isFollowing = false;
                 state.followId = null;
+            })
+            .addCase(myFollowers.fulfilled, (state, action) => {
+                state.followers = action?.payload;
+            })
+            .addCase(meFollowing.fulfilled, (state, action) => {
+                state.meFollow = action?.payload;
             })
     }
 })

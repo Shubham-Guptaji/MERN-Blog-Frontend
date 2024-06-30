@@ -13,6 +13,8 @@ import Layout from "../../Layout/Layout";
 import { fetchDash } from "../../Redux/authSlice";
 import AllPost from "./AllPost";
 import Dash from "./Dash";
+import Followers from "./Followers";
+import Following from "./Following";
 
 const DashLayout = () => {
   const {username, isVerified} = useSelector((state) => state?.auth?.data);
@@ -35,7 +37,7 @@ const DashLayout = () => {
     drawerSide[0].style.width = "auto";
     setSubNavState(true);
   };
-  const arr = [0, Dash, 0, AllPost];
+  const arr = [0, Dash, 0, AllPost, Followers, Following];
   const ComponentData = arr[currentPage];
   useEffect(() => {
     dispatch(fetchDash({ username }));
@@ -326,4 +328,5 @@ const DashLayout = () => {
     </Layout>
   );
 };
+
 export default DashLayout;
