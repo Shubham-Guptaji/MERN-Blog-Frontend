@@ -17,6 +17,11 @@ const initialState = {
         data: {},
         chartData: null,
         dashPostPage: 0
+    },
+    registeredData: {
+        areMore: false,
+        data: [],
+        count: 0
     }
 }
 
@@ -173,11 +178,11 @@ export const deleteAccount = createAsyncThunk("/user/delete", async (data) => {
     try {
         let res = axiosInstance.delete(`/user/profile/${data.id}`);
         toast.promise(res, {
-            loading: "Deleting Your Account. May take some time.",
+            loading: "Deleting the Account. May take some time.",
             success: (data) => {
                 return data?.data?.message;
             },
-            error: "Failed to delete your account"
+            error: "Failed to delete the account"
         });
         res = await res;
         return res?.data;
@@ -220,6 +225,24 @@ export const updateProfile = createAsyncThunk("/user/updateProfile", async (data
         toast.error(error.response.data.message);
         throw new Error(error.response.data.message)
     }
+})
+
+export const AllRegisteredUser = createAsyncThunk("/user/registered-all", async (data) => {
+    try {
+        let res = axiosInstance.get(`/user/profile?skip=${data.currentPage * 20}`);
+            toast.promise(res, {
+                loading: "Fetching registered Users",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+                error: "Error Fetching registered Users"
+            });
+            res = await res;
+            return res?.data;
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+            throw new Error(error?.response?.data?.message)
+        }
 })
 
 const authSlice = createSlice({
@@ -312,6 +335,11 @@ const authSlice = createSlice({
                 state.data = action?.payload?.user;
                 state.role = action?.payload?.user?.role;
                 state.token = action?.payload?.user?.tokens;
+            })
+            .addCase(AllRegisteredUser.fulfilled, (state, action) => {
+                state.registeredData.areMore = action?.payload?.areMore;
+                state.registeredData.data = action?.payload?.data;
+                state.registeredData.count = action?.payload?.count;
             })
     }
 })

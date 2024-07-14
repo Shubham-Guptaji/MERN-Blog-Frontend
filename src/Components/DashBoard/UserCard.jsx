@@ -1,7 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const FollowerCard = ({ data }) => {
-  const navigate = useNavigate();
+const UserCard = ({data}) => {
+    const navigate = useNavigate();
   const date = new Date(data.createdAt);
   const newDate = date.toLocaleDateString("en-GB");
   return (
@@ -11,22 +11,25 @@ const FollowerCard = ({ data }) => {
         onClick={() => navigate(`/username/${data.username}`)}
       >
         <img
-          src={data.avatar}
-          alt={data.title}
+          src={data.avatar.secure_url}
+          alt={data.username}
           className="transform duration-300 hover:scale-125 "
         />
       </div>
 
       <div
-        className="mt-2 cursor-pointer text-center  text-lg font-medium text-primary hover:text-indigo-800"
+        className="mt-2 cursor-pointer text-center text-wrap w-full text-lg font-medium text-primary hover:text-indigo-800"
         onClick={() => navigate(`/username/${data.username}`)}
       >
-        {data.fullName}
+        {data.firstName + " " + data.lastName}
       </div>
       <div className=" text-center italic text-gray-500">
-        Followed : {newDate}
+        Created : {newDate}
+      </div>
+      <div className="text-center italic text-gray-500">
+        <strong>Role : </strong><span className="text-primary uppercase">{data.role}</span>
       </div>
     </div>
   );
 };
-export default FollowerCard;
+export default UserCard;

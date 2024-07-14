@@ -7,6 +7,7 @@ import { HiUserGroup } from "react-icons/hi2";
 import { IoHomeOutline } from "react-icons/io5";
 import { MdOutlineSettings } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { PiUsersFourFill } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 import Layout from "../../Layout/Layout";
@@ -18,9 +19,10 @@ import Following from "./Following";
 import Profile from "./Profile";
 import DeleteAccount from "./DeleteAccount";
 import EditProfile from "./EditProfile";
+import AllUsers from "./AllUsers";
 
 const DashLayout = () => {
-  const {username, isVerified} = useSelector((state) => state?.auth?.data);
+  const {username, isVerified, role} = useSelector((state) => state?.auth?.data);
   const [currentPage, setCurrentPage] = useState(1);
   const [subNavState, setSubNavState] = useState(true);
   const dispatch = useDispatch();
@@ -40,7 +42,7 @@ const DashLayout = () => {
     drawerSide[0].style.width = "auto";
     setSubNavState(true);
   };
-  const arr = [0, Dash, 0, AllPost, Followers, Following, Profile, DeleteAccount, EditProfile];
+  const arr = [0, Dash, AllUsers, AllPost, Followers, Following, Profile, DeleteAccount, EditProfile];
   function ChangePage (pageNo) {
     setCurrentPage(pageNo);
   }
@@ -93,6 +95,19 @@ const DashLayout = () => {
                       <IoHomeOutline className="h-6 w-6" /> Dashboard
                     </Link>
                   </li>
+                  { role == "admin" &&
+                      (
+                        <li>
+                      <Link
+                        to="/dashboard"
+                        className="text-base font-semibold"
+                        onClick={() => setCurrentPage(2)}
+                      >
+                        <PiUsersFourFill className="h-6 w-6" /> All Users
+                      </Link>
+                    </li>
+                      )
+                    }
                   <li>
                     <Link to="/create" className="text-base font-semibold">
                       <FaUserEdit className="h-6 w-6" /> Create New Post
@@ -170,6 +185,19 @@ const DashLayout = () => {
                         <IoHomeOutline className="h-6 w-6" /> Dashboard
                       </Link>
                     </li>
+                    { role == "admin" &&
+                      (
+                        <li>
+                      <Link
+                        to="/dashboard"
+                        className=" font-semibold"
+                        onClick={() => setCurrentPage(2)}
+                      >
+                        <PiUsersFourFill className="h-6 w-6" /> All Users
+                      </Link>
+                    </li>
+                      )
+                    }
                     <li>
                       {isVerified ? (<Link to="/create" className=" font-semibold">
                         <FaUserEdit className="h-6 w-6" /> Create New Post

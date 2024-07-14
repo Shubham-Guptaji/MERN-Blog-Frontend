@@ -27,7 +27,7 @@ function PostEditor() {
   const dispatch = useDispatch();
   const [isMounted, setIsMounted] = useState(true);
   const location = useLocation();
-  const { post } = location.state || {};
+  const { post, userId } = location.state || {};
   const [resourceArr, setResourceArr] = useState([]);
   const [postData, setPostData] = useState({
     id: post ? post._id : null,
@@ -39,12 +39,11 @@ function PostEditor() {
     metaDescription: post ? post.metaDescription : "",
     url: post ? post.url : "",
     postImage: post ? undefined : null,
-    authorId: post ? post?.author?._id : useSelector((state) => state?.auth?.data?.id),
+    authorId: post ? post?.author?._id : userId ? userId : useSelector((state) => state?.auth?.data?.id),
   });
   const [previewImage, setPreviewImage] = useState("");
   const [data, setData] = useState(post ? post.content : null);
   const [tagValue, setTagValue] = useState("");
-
   useEffect(() => {
     const editor = new EditorJS({
       holder: editorHolder.current,

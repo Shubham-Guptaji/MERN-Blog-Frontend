@@ -420,7 +420,7 @@ const Post = () => {
               <p className="mt-3 text-justify">{postDetails?.author?.bio}</p>
             </div>
             <div className="px-2 ">
-              {!isFollowing ? (
+              {userId != postDetails?.author?._id && (!isFollowing ? (
                 <button
                   className="btn btn-primary mt-3"
                   onClick={followHandler}
@@ -434,7 +434,7 @@ const Post = () => {
                 >
                   Following
                 </button>
-              )}
+              ))}
             </div>
           </div>
 

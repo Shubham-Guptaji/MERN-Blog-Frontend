@@ -22,6 +22,7 @@ import TotalPosts from "./Pages/TotalPosts";
 import VerifyAccount from "./Pages/VerifyAccount";
 import AuthToken from "./utils/AuthToken";
 import ChangePassword from "./Pages/Dashboard/ChangePassword";
+import PublicProfile from "./Pages/PublicProfile";
 
 function App() {
   return (
@@ -79,6 +80,7 @@ function App() {
         <Route path="/posts/:url" element={<Post />} />
         <Route path="/user/:username/account/verify/:token" element={<VerifyAccount />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/username/:username" element={<PublicProfile />} />
         
         <Route element={<NotRequireAuth />} >
           <Route path="/sign-up" element={<SignUp />} />
