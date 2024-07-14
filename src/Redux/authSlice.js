@@ -150,8 +150,77 @@ export const updateToken = createAsyncThunk("/user/refresh-token", async () => {
     } catch (error) {
         toast.error(error.response.data.message);
     }
+});
+
+export const changemyPassword = createAsyncThunk("/user/change-password", async (passData) => {
+    try {
+        let res = axiosInstance.post("/user/change-password", passData);
+        toast.promise(res, {
+            loading: "Changing the Password",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to change your password"
+        });
+        res = await res;
+        return res?.data;
+    } catch (error) {
+        toast.error(error.response.data.message);
+    }
 })
 
+export const deleteAccount = createAsyncThunk("/user/delete", async (data) => {
+    try {
+        let res = axiosInstance.delete(`/user/profile/${data.id}`);
+        toast.promise(res, {
+            loading: "Deleting Your Account. May take some time.",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to delete your account"
+        });
+        res = await res;
+        return res?.data;
+    } catch (error) {
+        toast.error(error.response.data.message);
+        throw new Error(error.response.data.message);
+    }
+})
+
+export const backgroundImage = createAsyncThunk("/user/bgImg", async (data) => {
+    try {
+        let res = axiosInstance.post(`/user/backgroundImage`, data);
+        toast.promise(res, {
+            loading: "Updating the background Image.",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to update the background Image."
+        });
+        res = await res;
+        return res?.data;
+    } catch (error) {
+        toast.error(error.response.data.message);
+    }
+})
+
+export const updateProfile = createAsyncThunk("/user/updateProfile", async (data) => {
+    try {
+        let res = axiosInstance.patch(`/user/profile`, data);
+        toast.promise(res, {
+            loading: "Updating the Profile.",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to update the profile."
+        });
+        res = await res;
+        return res?.data;
+    } catch (error) {
+        toast.error(error.response.data.message);
+        throw new Error(error.response.data.message)
+    }
+})
 
 const authSlice = createSlice({
     name: "auth",
@@ -197,13 +266,6 @@ const authSlice = createSlice({
                 state.data = null;
             })
             .addCase(updateToken.fulfilled, (state, action) => {
-                // localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
-                // localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
-                // localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
-
-                // localStorage.setItem("token", action?.payload?.tokens ? JSON.stringify(action?.payload?.tokens) : "");
-                // state.isLoggedIn = action?.payload?.success;
-                // state.token = action?.payload?.tokens;
                 
                 // modified
                 localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
@@ -217,7 +279,6 @@ const authSlice = createSlice({
                 state.token = action?.payload?.user?.tokens;
             })
             .addCase(updateToken.rejected, (state) => {
-                console.log('rejected');
                 localStorage.clear();
                 state.token = null;
                 state.data = null;
@@ -232,6 +293,25 @@ const authSlice = createSlice({
             })
             .addCase(fetchChartData.fulfilled, (state, action) => {
                 state.profile.chartData = action?.payload?.chartData;
+            })
+            .addCase(deleteAccount.fulfilled, (state, action) => {
+                localStorage.clear();
+                state.isLoggedIn = false;
+                state.token = null;
+                state.data = null;
+                // window.location.href = "https://blog.alcodemy.tech";
+            })
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
+                localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
+                localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
+
+                localStorage.setItem("token", action?.payload?.user?.tokens ? JSON.stringify(action?.payload?.user?.tokens) : "");
+
+                state.isLoggedIn = action?.payload?.success;
+                state.data = action?.payload?.user;
+                state.role = action?.payload?.user?.role;
+                state.token = action?.payload?.user?.tokens;
             })
     }
 })

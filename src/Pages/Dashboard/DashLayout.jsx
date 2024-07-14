@@ -15,6 +15,9 @@ import AllPost from "./AllPost";
 import Dash from "./Dash";
 import Followers from "./Followers";
 import Following from "./Following";
+import Profile from "./Profile";
+import DeleteAccount from "./DeleteAccount";
+import EditProfile from "./EditProfile";
 
 const DashLayout = () => {
   const {username, isVerified} = useSelector((state) => state?.auth?.data);
@@ -37,7 +40,10 @@ const DashLayout = () => {
     drawerSide[0].style.width = "auto";
     setSubNavState(true);
   };
-  const arr = [0, Dash, 0, AllPost, Followers, Following];
+  const arr = [0, Dash, 0, AllPost, Followers, Following, Profile, DeleteAccount, EditProfile];
+  function ChangePage (pageNo) {
+    setCurrentPage(pageNo);
+  }
   const ComponentData = arr[currentPage];
   useEffect(() => {
     dispatch(fetchDash({ username }));
@@ -65,64 +71,6 @@ const DashLayout = () => {
                   aria-label="close sidebar"
                   className="drawer-overlay"
                 ></label>
-                {/* <ul className="menu min-h-full w-72 bg-gray-100 p-4 text-base-content">
-                  <li className="absolute right-2 w-fit cursor-pointer">
-                    <button onClick={hideDrawer}>
-                      <AiFillCloseCircle
-                        size={24}
-                        className=" cursor-pointer text-primary"
-                      />
-                    </button>
-                  </li>
-                  <span className="mt-12"></span>
-
-                  
-                  <li>
-                    <Link
-                      to="/dashboard"
-                      className=" text-base font-semibold text-indigo-600"
-                    >
-                      <IoHomeOutline className="h-6 w-6" /> Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/create" className="text-base font-semibold">
-                      <FaUserEdit className="h-6 w-6" /> Create New Post
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/dashboard/my-posts"
-                      className="text-base font-semibold"
-                    >
-                      <FaFileAlt className="h-6 w-6" /> My Posts
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/dashboard/followers"
-                      className="text-base font-semibold"
-                    >
-                      <HiUserGroup className="h-6 w-6" /> My Followers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/dashboard/following"
-                      className="text-base font-semibold"
-                    >
-                      <HiUserGroup className="h-6 w-6" /> My Followings
-                    </Link>
-                  </li>
-                  <li className="mt-auto">
-                    <Link
-                      to="/dashboard/setting"
-                      className="text-base font-semibold"
-                    >
-                      <MdOutlineSettings className="h-6 w-6" /> Settings
-                    </Link>
-                  </li>
-                </ul> */}
 
                 <ul className="menu min-h-full w-72 bg-gray-100 p-4 text-base-content">
                   <li className="absolute right-2 w-fit cursor-pointer">
@@ -183,7 +131,7 @@ const DashLayout = () => {
                       className="text-base font-semibold"
                       onClick={() => setCurrentPage(6)}
                     >
-                      <MdOutlineSettings className="h-6 w-6" /> Settings
+                      <MdOutlineSettings className="h-6 w-6" /> Profile
                     </Link>
                   </li>
                 </ul>
@@ -209,76 +157,28 @@ const DashLayout = () => {
                     aria-label="close sidebar"
                     className="drawer-overlay"
                   ></label>
-                  {/* <ul className="menu min-h-full w-72 bg-base-200 p-4 text-base-content">
-                    // Sidebar content here 
-                    <li>
-                      <Link
-                        to="/dashboard"
-                        className=" text-base font-semibold text-indigo-600"
-                      >
-                        <IoHomeOutline className="h-6 w-6" /> Dashboard
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/create" className="text-base font-semibold">
-                        <FaUserEdit className="h-6 w-6" /> Create New Post
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/dashboard/my-posts"
-                        className="text-base font-semibold"
-                      >
-                        <FaFileAlt className="h-6 w-6" /> My Posts
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/dashboard/followers"
-                        className="text-base font-semibold"
-                      >
-                        <HiUserGroup className="h-6 w-6" /> My Followers
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/dashboard/following"
-                        className="text-base font-semibold"
-                      >
-                        <HiUserGroup className="h-6 w-6" /> My Followings
-                      </Link>
-                    </li>
-                    <li className="mt-auto">
-                      <Link
-                        to="/dashboard/setting"
-                        className="text-base font-semibold"
-                      >
-                        <MdOutlineSettings className="h-6 w-6" /> Settings
-                      </Link>
-                    </li>
-                  </ul> */}
 
-
-                  <ul className="menu min-h-full w-72 bg-base-200 p-4 text-base-content">
+                  {/* <ul className="menu min-h-full w-72 bg-base-200 p-4 text-base-content"> */}
+                  <ul className="menu  min-h-full w-72 bg-blue-600  p-4 text-gray-200 lg:rounded-sm lg:text-lg ">
                     {/* Sidebar content here */}
                     <li>
                       <Link
                         to="/dashboard"
-                        className=" text-base font-semibold text-indigo-600"
+                        className=" font-semibold text-orange-300"
                         onClick={() => setCurrentPage(1)}
                       >
                         <IoHomeOutline className="h-6 w-6" /> Dashboard
                       </Link>
                     </li>
                     <li>
-                      {isVerified ? (<Link to="/create" className="text-base font-semibold">
+                      {isVerified ? (<Link to="/create" className=" font-semibold">
                         <FaUserEdit className="h-6 w-6" /> Create New Post
-                      </Link>) : (<button className="text-base font-semibold" onClick={() => toast.error("Verify your account to create the post")}><FaUserEdit className="h-6 w-6" /> Create New Post</button>)}
+                      </Link>) : (<button className=" font-semibold" onClick={() => toast.error("Verify your account to create the post")}><FaUserEdit className="h-6 w-6" /> Create New Post</button>)}
                     </li>
                     <li>
                       <Link
                         to="/dashboard"
-                        className="text-base font-semibold"
+                        className=" font-semibold"
                         onClick={() => setCurrentPage(3)}
                       >
                         <FaFileAlt className="h-6 w-6" /> My Posts
@@ -287,7 +187,7 @@ const DashLayout = () => {
                     <li>
                       <Link
                         to="/dashboard"
-                        className="text-base font-semibold"
+                        className=" font-semibold"
                         onClick={() => setCurrentPage(4)}
                       >
                         <HiUserGroup className="h-6 w-6" /> My Followers
@@ -296,7 +196,7 @@ const DashLayout = () => {
                     <li>
                       <Link
                         to="/dashboard"
-                        className="text-base font-semibold"
+                        className=" font-semibold"
                         onClick={() => setCurrentPage(5)}
                       >
                         <HiUserGroup className="h-6 w-6" /> My Followings
@@ -305,21 +205,19 @@ const DashLayout = () => {
                     <li className="mt-auto">
                       <Link
                         to="/dashboard"
-                        className="text-base font-semibold"
+                        className=" font-semibold"
                         onClick={() => setCurrentPage(6)}
                       >
-                        <MdOutlineSettings className="h-6 w-6" /> Settings
+                        <MdOutlineSettings className="h-6 w-6" /> Profile
                       </Link>
                     </li>
                   </ul>
-
-
 
                 </div>
               </div>
               <div className="divider divider-horizontal hidden xl:flex"></div>
               <div className="container mx-auto h-full w-full px-4 pt-4 pb-6 lg:py-6 ">
-                <ComponentData />
+                <ComponentData changePage={ChangePage} />
               </div>
             </div>
           </div>

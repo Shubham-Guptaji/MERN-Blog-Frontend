@@ -21,6 +21,7 @@ import SignUp from "./Pages/Sign-up";
 import TotalPosts from "./Pages/TotalPosts";
 import VerifyAccount from "./Pages/VerifyAccount";
 import AuthToken from "./utils/AuthToken";
+import ChangePassword from "./Pages/Dashboard/ChangePassword";
 
 function App() {
   return (
@@ -72,13 +73,13 @@ function App() {
         <Route path="/posts" element={<TotalPosts />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/user/:username/account/verify/:token" element={<VerifyAccount />} />
         <Route path="/about" element={<About />} />
         <Route path="/denied" element={<Denied />} />
-
+        
         <Route path="/posts/:url" element={<Post />} />
-
+        <Route path="/user/:username/account/verify/:token" element={<VerifyAccount />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        
         <Route element={<NotRequireAuth />} >
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
@@ -86,12 +87,10 @@ function App() {
         </Route>
         
         <Route element={<RequireAuth allowedRoles={["user", "admin"]}/>} >
-          {/* <Route path="/create" element={<Create />} /> */}
           <Route path="/dashboard" element={<DashLayout />} />
-          {/* <Route path="/update" element={<UpdatePost />} /> */}
           <Route path="/create" element={<PostEditor />} />
           <Route path="/update" element={<PostEditor />} />
-          
+          <Route path="/change-password" element={<ChangePassword />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

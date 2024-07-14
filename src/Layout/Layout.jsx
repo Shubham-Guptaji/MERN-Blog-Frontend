@@ -24,6 +24,7 @@ const Layout = ({ children }) => {
   ];
   const date = new Date();
   const year = date.getFullYear();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const logouthandler = async () => {
     const res = await dispatch(logout());
@@ -57,6 +58,7 @@ const Layout = ({ children }) => {
                   // <span onClick={logouthandler}>Logout</span>
                   <>
                   <button  onClick={()=>document.getElementById('my_modal_1').showModal()}>Logout</button>
+                  {/* <button  onClick={()=>setIsLoggingOut(true)}>Logout</button> */}
                   <dialog id="my_modal_1" className="modal">
                     <div className="modal-box">
                       <h3 className="font-bold text-lg text-indigo-700">Confirm Logout</h3>
@@ -64,12 +66,15 @@ const Layout = ({ children }) => {
                       <div className="modal-action">
                         <button className="btn" onClick={logouthandler}>Confirm</button>
                         <form method="dialog">
-                          {/* if there is a button in form, it will close the modal */}
                           <button className="btn">Close</button>
                         </form>
                       </div>
                     </div>
                   </dialog>
+
+                  
+                  
+
                   </>
                 ) : (
                   <Link to="/sign-in">Sign In</Link>
@@ -119,14 +124,20 @@ const Layout = ({ children }) => {
             ))}
             <li className="block px-4 py-0.5 font-serif text-base-200 hover:text-white">
               {isLoggedIn ? (
-                <span onClick={logouthandler}>
-                  <span
-                  className="block text-lg font-medium text-white"
-                  onClick={toggleMenu}
-                >
-                  Logout
-                </span>
-                </span>
+                <>
+                <button  onClick={()=>document.getElementById('my_modal_2').showModal()} className="text-lg font-medium text-white">Logout</button> 
+                <dialog id="my_modal_2" className="modal">
+                  <div className="modal-box">
+                    <h3 className="font-bold text-lg text-indigo-700">Confirm Logout</h3>
+                    <p className="py-4 text-black">Are you sure you want to logout from your account now?</p>
+                    <div className="modal-action">
+                      <button className="btn" onClick={logouthandler}>Confirm</button>
+                      <form method="dialog">
+                        <button className="btn">Close</button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog> </>
               ) : (
                 <Link
                   to="/sign-in"

@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
 const FollowerCard = ({ data }) => {
-  console.log(data);
   const navigate = useNavigate();
   const date = new Date(data.createdAt);
   const newDate = date.toLocaleDateString("en-GB");

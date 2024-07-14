@@ -39,7 +39,7 @@ function PostEditor() {
     metaDescription: post ? post.metaDescription : "",
     url: post ? post.url : "",
     postImage: post ? undefined : null,
-    authorId: useSelector((state) => state?.auth?.data?.id),
+    authorId: post ? post?.author?._id : useSelector((state) => state?.auth?.data?.id),
   });
   const [previewImage, setPreviewImage] = useState("");
   const [data, setData] = useState(post ? post.content : null);

@@ -12,7 +12,6 @@ const Followers = () => {
     (state) => state?.misc?.followers?.areMoreFollowers
   );
   const Followers = useSelector((state) => state?.misc?.followers?.followers);
-  console.log(areMore, Followers);
   useEffect(() => {
     dispatch(myFollowers({skip : currentPage * 20}));
   }, [currentPage]);

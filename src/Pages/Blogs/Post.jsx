@@ -23,7 +23,7 @@ import {
 } from "react-share";
 
 import Layout from "../../Layout/Layout";
-import { getPost } from "../../Redux/blogSlice";
+import { deletePost, getPost } from "../../Redux/blogSlice";
 import { fetchComments } from "../../Redux/CommentSlice";
 import { CreateComment } from "../../Redux/CommentSlice";
 import {
@@ -36,11 +36,13 @@ import {
 } from "../../Redux/Miscellaneous";
 import CommentCard from "./PostComponents/CommentCard";
 import PostCard from "./PostComponents/PostCard";
+import { MdEditSquare, MdDeleteForever } from "react-icons/md";
 const Post = () => {
   const url = useParams().url;
   const userId = useSelector((state) => state?.auth?.data?.id);
   const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
   const isVerified = useSelector((state) => state?.auth?.data?.isVerified);
+  const role = useSelector((state) => state?.auth?.data?.role) || null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const likes = useSelector((state) => state?.misc?.postLikes);
@@ -48,7 +50,10 @@ const Post = () => {
   const followId = useSelector((state) => state?.misc?.followId);
   const isFollowing = useSelector((state) => state?.misc?.isFollowing);
   const postComments = useSelector((state) => state?.comment?.comments);
-  const recentPosts = useSelector((state) => state?.blog?.currentPost?.recentPosts);
+  const recentPosts = useSelector(
+    (state) => state?.blog?.currentPost?.recentPosts
+  );
+  const [isDeleting, setIsDeleting] = useState(false);
   const [newComment, setNewComment] = useState("");
   const { postDetails } = useSelector((state) => state?.blog?.currentPost);
   let postData;
@@ -145,6 +150,15 @@ const Post = () => {
       className: "table-auto w-full ",
     },
   };
+  async function deletePostHandler() {
+    if (!isLoggedIn) return toast.error("Login to delete..");
+    const response = await dispatch(
+      deletePost({ id: postDetails._id, authorId: postDetails.author })
+    );
+    if (response?.payload?.success) {
+      navigate(-1);
+    }
+  }
 
   return (
     <Layout>
@@ -187,19 +201,136 @@ const Post = () => {
           />
         </Helmet>
       )}
+
+      <div
+        class={`relative z-10 ${!isDeleting && "hidden"}`}
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+      >
+        {/* <!--
+    Background backdrop, show/hide based on modal state.
+
+    Entering: "ease-out duration-300"
+      From: "opacity-0"
+      To: "opacity-100"
+    Leaving: "ease-in duration-200"
+      From: "opacity-100"
+      To: "opacity-0"
+  --> */}
+        <div
+          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          aria-hidden="true"
+        ></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            {/* <!--
+        Modal panel, show/hide based on modal state.
+
+        Entering: "ease-out duration-300"
+          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          To: "opacity-100 translate-y-0 sm:scale-100"
+        Leaving: "ease-in duration-200"
+          From: "opacity-100 translate-y-0 sm:scale-100"
+          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+      --> */}
+            <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                  <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <svg
+                      class="h-6 w-6 text-red-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                      />
+                    </svg>
+                  </div>
+                  <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                    <h3
+                      class="text-base font-semibold leading-6 text-gray-900"
+                      id="modal-title"
+                    >
+                      Delete This Post
+                    </h3>
+                    <div class="mt-2">
+                      <p class="text-sm text-gray-500">
+                        Are you sure you want to delete this post? All of
+                        post's Data including content, likes and comments will be removed permanently. This action
+                        cannot be undone.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <button
+                  type="button"
+                  class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                  onClick={() => deletePostHandler()}
+                >
+                  Delete
+                </button>
+                <button
+                  type="button"
+                  class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                  onClick={() => setIsDeleting(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4">
         <div className="post mx-auto my-10 w-full max-w-4xl">
           <h1 className="my-5 text-center text-2xl font-semibold text-indigo-600 md:text-3xl lg:text-4xl">
             {postDetails.title}
           </h1>
           {postDetails?.public_image?.resource_url && (
-            <img
-              src={postDetails.public_image.resource_url}
-              alt={postDetails.title}
-              className="mx-auto my-4 h-auto w-full rounded-xl p-2"
-              width="1920"
-              height="1080"
-            />
+
+            <div className="relative w-full">
+              <img
+                src={postDetails.public_image.resource_url}
+                alt={postDetails.title}
+                className="mx-auto my-4 h-auto w-full rounded-xl p-2"
+                width="1920"
+                height="1080"
+              />
+              {((userId && userId == postDetails.author._id) ||
+                (role && role == "admin")) && (
+
+                <div className="absolute right-0 top-0 m-2 flex gap-2">
+                  <div
+                    className="glass w-fit cursor-pointer rounded hover:bg-gray-200"
+                    onClick={() => {
+                      let post = postDetails;
+                      navigate("/update", {
+                        state: { post },
+                      });
+                    }}
+                  >
+                    <MdEditSquare className="h-8 w-8 text-white hover:text-blue-600" />
+                  </div>
+                  <div
+                    className="glass w-fit cursor-pointer rounded hover:bg-gray-200"
+                    onClick={() => setIsDeleting(true)}
+                  >
+                    <MdDeleteForever className="h-8 w-8 text-white hover:text-blue-600" />
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
           <div className="flex flex-wrap gap-2">
@@ -311,30 +442,38 @@ const Post = () => {
 
           <div className="mt-8">
             <h2 className="text-2xl font-semibold">Comments :</h2>
-            {
-              isLoggedIn ? (<form className="mt-4 w-full px-4" onSubmit={commentHandler}>
-              <textarea
-                className="h-24 w-full rounded-md border-2 border-indigo-600 p-2 "
-                placeholder="Your comment here"
-                value={newComment}
-                onChange={(event) => setNewComment(event.target.value)}
-              ></textarea>
-              <button className="btn btn-primary mt-4 ">Add comment</button>
-            </form>) : (
-              <p className="text-lg font-semibold mt-3 text-center">Login to comment on this Post.</p>
-            )
-            }
+            {isLoggedIn ? (
+              <form className="mt-4 w-full px-4" onSubmit={commentHandler}>
+                <textarea
+                  className="h-24 w-full rounded-md border-2 border-indigo-600 p-2 "
+                  placeholder="Your comment here"
+                  value={newComment}
+                  onChange={(event) => setNewComment(event.target.value)}
+                ></textarea>
+                <button className="btn btn-primary mt-4 ">Add comment</button>
+              </form>
+            ) : (
+              <p className="mt-3 text-center text-lg font-semibold">
+                Login to comment on this Post.
+              </p>
+            )}
             <div className="mt-8">
               {postComments?.map((comment) => (
-                <CommentCard key={comment._id} comment={comment} postDetails={postDetails} />
-                ))}
+                <CommentCard
+                  key={comment._id}
+                  comment={comment}
+                  postDetails={postDetails}
+                />
+              ))}
             </div>
-            <hr className="mt-8"/>
+            <hr className="mt-8" />
             <div className="mt-8">
-              <h4 className="text-xl sm:text-3xl font-semibold text-indigo-600">Posts you may like</h4>
-              <div className="flex flex-wrap justify-center gap-5 mt-6">
+              <h4 className="text-xl font-semibold text-indigo-600 sm:text-3xl">
+                Posts you may like
+              </h4>
+              <div className="mt-6 flex flex-wrap justify-center gap-5">
                 {recentPosts?.map((post) => (
-                  <PostCard key={post._id} post={post} />  
+                  <PostCard key={post._id} post={post} />
                 ))}
               </div>
             </div>
