@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import Layout from "../Layout/Layout";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAccount, fetchDash } from "../Redux/authSlice";
+import { BlockUser, deleteAccount, fetchDash, UnBlockUser } from "../Redux/authSlice";
 import { FaThumbsUp } from "react-icons/fa";
 import { RiMessage2Fill } from "react-icons/ri";
 import { HiMiniUserGroup } from "react-icons/hi2";
+import toast from "react-hot-toast";
 import { BsFileEarmarkPostFill } from "react-icons/bs";
 import { IoPerson } from "react-icons/io5";
-import PostTemplate from "./PublicProfileComponents/PostTemplate";
+import PostTemplate from "../Components/DashBoard/PublicProfileComponents/PostTemplate";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Follow, IsFollowing, UnFollow } from "../Redux/Miscellaneous";
 import imgBg from "../assets/imgBg.webp";
@@ -25,6 +26,7 @@ const PublicProfile = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const data = useSelector((state) => state?.auth?.profile?.data);
   const userId = data?._id;
+  const isBlocked = data?.isBlocked;
   const isFollowing = useSelector((state) => state?.misc?.isFollowing);
   const followId = useSelector((state) => state?.misc?.followId);
   let bgImage = data?.bgImage?.secure_url ? data?.bgImage?.secure_url : imgBg;
@@ -46,12 +48,31 @@ const PublicProfile = () => {
       return toast.error("You should be loggedin with followId.");
     dispatch(UnFollow({ FollowId: followId }));
   };
+  async function blockUnblockUserfn () {
+    if (!isLoggedIn) return toast.error("Login to block..");
+    if (role != "admin") return toast.error("You are not authorized to do this.")
+    if (data) {
+      if(!isBlocked) await dispatch(BlockUser({id: userId, username: data?.username}));
+      else await dispatch(UnBlockUser({id: userId, username: data?.username}));
+    }
+  }
 
   useEffect(() => {
-    let obj = {skip: currentPage * 20}
-    dispatch(fetchDash({ username, obj }));
-    window.scrollTo(0, 0);
-    if (isLoggedIn && userId) dispatch(IsFollowing({ authId: userId }));
+    if(!isLoggedIn) {
+      toast.error("Login to see Author Profile");
+      navigate("/sign-in");
+      return
+    }
+    const effectFn = async () => {
+      let obj = { skip: currentPage * 20 };
+      const res = await dispatch(fetchDash({ username, obj }));
+      if(!res?.payload) navigate("/");
+      window.scrollTo(0, 0);
+      if (isLoggedIn && res?.payload?.userDetails) {
+        await dispatch(IsFollowing({ authId: res?.payload?.userDetails?._id }));
+      }
+    };
+    effectFn();
   }, [currentPage]);
   return (
     <Layout>
@@ -84,22 +105,26 @@ const PublicProfile = () => {
                   {data?.bio}
                 </p>
 
-                <div className="px-2 ">
+                <div className="px-2 flex gap-2 items-center justify-center mt-3">
               {MyId != userId && (!isFollowing ? (
                 <button
-                  className="btn btn-primary mt-3"
+                  className="btn btn-primary"
                   onClick={followHandler}
                 >
                   Follow
                 </button>
               ) : (
                 <button
-                  className="hover:btn-primary-content btn mt-3"
+                  className="hover:btn-primary-content btn "
                   onClick={unfollowHandler}
                 >
                   Following
                 </button>
               ))}
+              {isLoggedIn &&  role === "admin" && userId != MyId && ( !isBlocked ?
+                (<button type="button" className="btn btn-error" onClick={blockUnblockUserfn}>Block</button>) :
+                (<button type="button" className="btn btn-info" onClick={blockUnblockUserfn}>Unblock</button>)
+              )}
 
             </div>
               </div>

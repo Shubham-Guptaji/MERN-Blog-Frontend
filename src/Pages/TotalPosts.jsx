@@ -25,11 +25,10 @@ const TotalPosts = () => {
     // Set a new timer for 1 second
     const newTimer = setTimeout(() => {
       if (value != "") dispatch(searchTag({ tag: value }));
-      // Perform your search logic here (e.g., call an API)
     }, 1200);
 
     setTimer(newTimer);
-    setSearchInput((prevInput) => value); // Use functional update
+    setSearchInput((prevInput) => value);
   };
 
   const handleSearch = (event) => {

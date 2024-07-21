@@ -9,6 +9,7 @@ import AuthRecent from "../Components/Home/Auth-Recent-Card";
 import TrendingCards from "../Components/Home/Trending-Cards";
 import Layout from "../Layout/Layout";
 import { getHomePagePosts } from "../Redux/blogSlice";
+import Carousel from "../Components/Home/Carousel-Section";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -46,17 +47,20 @@ const HomePage = () => {
         />
       </header>
       <section className="container mx-auto px-3 md:w-10/12 ">
-        <h2 className="mb-8 mt-12 text-center text-4xl font-bold sm:text-start">
+        <h2 className="mb-10 mt-12 text-center text-4xl font-bold border-b-8 border-double pb-5 border-green-400 w-fit mx-auto">
           Trending Posts
         </h2>
-        <div className="grid justify-center gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {trendingPosts.map((element) => (
+        <div className="w-full mx-auto lg:w-11/12">
+          {trendingPosts && trendingPosts.length && <Carousel post={trendingPosts.slice(0,3)} />}
+        </div>
+        <div className="w-fit mx-auto grid justify-center gap-3 sm:grid-cols-2 lg:grid-cols-3 ">
+          {trendingPosts.slice(3).length && trendingPosts.slice(3).map((element) => (
             <TrendingCards element={element} key={element._id} />
           ))}
         </div>
       </section>
       <section className="container mx-auto px-3 md:w-10/12 ">
-        <h2 className="mb-8 mt-12 text-center text-4xl font-bold sm:text-start">
+      <h2 className="mb-10 mt-12 text-center text-4xl font-bold border-b-8 border-double pb-5 border-green-400 w-fit mx-auto">
           Recent Posts
         </h2>
         <div className="flex flex-col-reverse gap-2 px-3 md:flex-row">
@@ -66,25 +70,11 @@ const HomePage = () => {
             ))}
           </div>
           <div className="mx-auto mb-5 w-10/12 md:w-4/12">
-            {/* <div className="flex flex-wrap gap-3 px-2">
-              {tags.map((element) => {
-                return (
-                  <Link
-                    to={`/search/${element.replace(/\s+/g, "-")}`}
-                    key={element}
-                    className="rounded-full p-3 pb-2 pt-2 text-center text-indigo-600 ring-2"
-                  >
-                    {element}
-                  </Link>
-                );
-              })}
-            </div> */}
 
             <div className="flex flex-wrap gap-3 px-2">
               {tags.map((element) => {
                 return (
                   <button
-                    // to={`/search/${element.replace(/\s+/g, "-")}`}
                     key={element}
                     className="rounded-full p-3 pb-2 pt-2 text-center text-indigo-600 ring-2"
                     onClick={() => Navigate("/posts", { state: { tag : element } })}

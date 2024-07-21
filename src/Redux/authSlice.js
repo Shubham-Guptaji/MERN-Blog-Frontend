@@ -79,6 +79,7 @@ export const logout = createAsyncThunk("/logout", async () => {
 
 export const fetchDash = createAsyncThunk("/dash", async (data) => {
     try {
+        
         let res = axiosInstance.post(`/user/profile/${data.username}`, data.obj);
         toast.promise(res, {
             loading: "Fetching your dashboard profile",
@@ -245,6 +246,60 @@ export const AllRegisteredUser = createAsyncThunk("/user/registered-all", async 
         }
 })
 
+export const GetRegisteredUser = createAsyncThunk("/user/search-user", async (data) => {
+    try {
+        let res = axiosInstance.get(`/user/profile/search?searchTerm=${data.searchTerm}&skip=${data.skip * 20}`);
+            toast.promise(res, {
+                loading: "Fetching registered Users",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+                error: "Error Fetching registered Users"
+            });
+            res = await res;
+            return res?.data;
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+            throw new Error(error?.response?.data?.message)
+        }
+})
+
+export const BlockUser = createAsyncThunk("/user/block", async (data) => {
+    try {
+        let res = axiosInstance.patch(`/user/profile/${data.id}/block`, data);
+            toast.promise(res, {
+                loading: "Blocking the User",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+                error: "Error Blocking this Users"
+            });
+            res = await res;
+            return res?.data;
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+            throw new Error(error?.response?.data?.message)
+        }
+})
+
+export const UnBlockUser = createAsyncThunk("/user/unblock", async (data) => {
+    try {
+        let res = axiosInstance.patch(`/user/profile/${data.id}/unblock`, data);
+            toast.promise(res, {
+                loading: "Unblocking the User",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+                error: "Error Unblocking this Users"
+            });
+            res = await res;
+            return res?.data;
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+            throw new Error(error?.response?.data?.message)
+        }
+})
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -340,6 +395,16 @@ const authSlice = createSlice({
                 state.registeredData.areMore = action?.payload?.areMore;
                 state.registeredData.data = action?.payload?.data;
                 state.registeredData.count = action?.payload?.count;
+            })
+            .addCase(GetRegisteredUser.fulfilled, (state, action) => {
+                state.registeredData.areMore = action?.payload?.areMore;
+                state.registeredData.data = action?.payload?.data;
+            })
+            .addCase(BlockUser.fulfilled, (state) => {
+                if(state?.profile?.data) state.profile.data.isBlocked = true;
+            })
+            .addCase(UnBlockUser.fulfilled, (state) => {
+                if(state?.profile?.data) state.profile.data.isBlocked = false;
             })
     }
 })
