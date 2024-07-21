@@ -3,8 +3,8 @@ import { FaSave } from "react-icons/fa";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { deleteComment, editComment, fetchComments } from "../../Redux/CommentSlice";
 
-import { deleteComment, editComment, fetchComments } from "../../../Redux/CommentSlice";
 const CommentCard = ({ comment, postDetails }) => {
   const dispatch = useDispatch();
   const [commentedit, setCommentEdit] = useState(false);

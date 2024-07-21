@@ -25,7 +25,6 @@ const EditProfile = (props) => {
 
     // if image exists then getting the url link of it
     if (uploadedImage) {
-      // setUserInput({ ...userInput, avatar: uploadedImage });
       const fileReader = new FileReader();
       fileReader.readAsDataURL(uploadedImage);
       fileReader.addEventListener("load", function () {
@@ -94,17 +93,10 @@ const EditProfile = (props) => {
     return (
         <>
              <div className="flex items-center justify-center min-h-[100vh] lg:min-h-[auto] sm:h-[80vh] px-2">
-        {/* card for creating the new card */}
         <form
           onSubmit={handleFormSubmit}
           className="flex flex-col justify-center gap-5 rounded-lg p-4  bg-indigo-500 text-white w-[700px] sm:min-h-[auto] min-h-[750px] sm:h-[470px] my-16 sm:my-10 shadow-[0_0_10px_black] relative"
         >
-          {/* <Link
-            to={"/dashboard"}
-            className="absolute top-8 text-2xl link text-accent cursor-pointer sm:inline w-fit"
-          >
-            <AiOutlineArrowLeft />
-          </Link> */}
 
           <button
           className="absolute top-8 text-2xl link text-accent cursor-pointer sm:inline w-fit"

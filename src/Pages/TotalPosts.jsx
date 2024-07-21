@@ -95,18 +95,6 @@ const TotalPosts = () => {
                     </button>
                   </li>
                   <span className="mt-12"></span>
-                  {/* {keywords.map((element) => {
-                    return (
-                      <li key={element}>
-                        <Link
-                          to={`/search/${element.replace(/\s+/g, "-")}`}
-                          className="text-clip text-base text-white"
-                        >
-                          {element}
-                        </Link>
-                      </li>
-                    );
-                  })} */}
 
                   {keywords.map((element) => {
                     return (
@@ -119,12 +107,7 @@ const TotalPosts = () => {
                         }}
                         className="text-clip text-base text-white"
                       >
-                        {/* <Link
-                          to={`/search/${element.replace(/\s+/g, "-")}`}
-                          className="text-clip text-base text-white"
-                        > */}
                           {element}
-                        {/* </Link> */}
                       </li>
                     );
                   })}

@@ -21,7 +21,6 @@ const Profile = (props) => {
     event.preventDefault();
     // getting the image
     const uploadedImage = event.target.files[0];
-    // if image exists then getting the url link of it
     if (uploadedImage) {
       setbgImg({
         bgImage: uploadedImage,

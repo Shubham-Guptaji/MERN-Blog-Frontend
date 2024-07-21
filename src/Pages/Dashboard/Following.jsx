@@ -19,7 +19,6 @@ const Following = () => {
       <>
         <h1 className="text-2xl lg:text-3xl font-semibold text-primary mb-10">All the Followed Authors</h1>
         <div className="grid justify-center gap-3 grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 ">
-        {/* <div className="flex justify-around flex-wrap w-full gap-2"> */}
         {Followers && Followers.map((data) => {
         return <FollowerCard key={data._id} data={data} />;
       })}
