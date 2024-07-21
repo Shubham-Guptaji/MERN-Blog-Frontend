@@ -20,8 +20,15 @@ const AllPost = () => {
                 <h1 className="text-2xl lg:text-3xl font-semibold text-primary mb-5">All Blog Posts</h1>
             <div className="flex flex-col gap-3">
             {
-                data && data.length && data?.map((post) => <PostCard key={post._id} post={post} />)
+                data && data.length != 0 && data?.map((post) => <PostCard key={post._id} post={post} />)
             }
+            {!data.length && (
+        <div className="flex flex-col items-center justify-center h-60 w-full text-2">
+          <h1 className="text-2xl font-semibold text-primary lg:text-3xl ">
+            You have not created any post yet. Let's create
+          </h1>
+        </div>
+      )}
             </div>
 
             <div className="mx-auto mb-8 mt-12 w-fit">

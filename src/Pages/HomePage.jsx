@@ -1,4 +1,4 @@
-// import React from "react";
+
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,10 +51,17 @@ const HomePage = () => {
           Trending Posts
         </h2>
         <div className="w-full mx-auto lg:w-11/12">
-          {trendingPosts && trendingPosts.length && <Carousel post={trendingPosts.slice(0,3)} />}
+          {(trendingPosts && trendingPosts.length != 0) ? <Carousel post={trendingPosts.slice(0, 3)} /> : 
+            (
+              <div className="flex flex-col items-center justify-center h-60 w-full text-2">
+          <h1 className="text-2xl font-semibold text-primary lg:text-3xl ">
+            There are no posts available right now
+          </h1>
+        </div>
+            )}
         </div>
         <div className="w-fit mx-auto grid justify-center gap-3 sm:grid-cols-2 lg:grid-cols-3 ">
-          {trendingPosts.slice(3).length && trendingPosts.slice(3).map((element) => (
+          {trendingPosts.slice(3).length != 0 && trendingPosts.slice(3).map((element) => (
             <TrendingCards element={element} key={element._id} />
           ))}
         </div>
@@ -65,14 +72,14 @@ const HomePage = () => {
         </h2>
         <div className="flex flex-col-reverse gap-2 px-3 md:flex-row">
           <div className=" mx-auto max-w-[400px] justify-center md:w-8/12 md:max-w-full">
-            {popularAuthorPosts.map((element) => (
+            {popularAuthorPosts && popularAuthorPosts.length != 0 && popularAuthorPosts.map((element) => (
               <AuthRecent element={element} key={element._id} />
             ))}
           </div>
           <div className="mx-auto mb-5 w-10/12 md:w-4/12">
 
             <div className="flex flex-wrap gap-3 px-2">
-              {tags.map((element) => {
+              {tags.length != 0 && tags.map((element) => {
                 return (
                   <button
                     key={element}

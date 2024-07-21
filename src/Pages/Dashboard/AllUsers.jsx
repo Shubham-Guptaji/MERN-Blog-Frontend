@@ -47,7 +47,7 @@ const AllUsers = () => {
       </div>
 
       <div className="min-[335px]:grid min-[335px]:grid-cols-2 justify-center flex flex-col gap-3 sm:grid-cols-3 2xl:grid-cols-4 ">
-        {data && data.map((data) => <UserCard data={data} key={data._id} />)}
+        {data && data.length != 0 && data.map((data) => <UserCard data={data} key={data._id} />)}
       </div>
       {!data.length && (
         <div className="flex flex-col items-center justify-center h-60 w-full text-2">

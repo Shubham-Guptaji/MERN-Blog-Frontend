@@ -96,21 +96,22 @@ const TotalPosts = () => {
                   </li>
                   <span className="mt-12"></span>
 
-                  {keywords.map((element) => {
-                    return (
-                      <li 
-                        key={element}
-                        onClick={() => {
-                          setTag(element);
-                          setCurrentPage(0);
-                          hideDrawer();
-                        }}
-                        className="text-clip text-base text-white"
-                      >
+                  {keywords.length != 0 &&
+                    keywords.map((element) => {
+                      return (
+                        <li
+                          key={element}
+                          onClick={() => {
+                            setTag(element);
+                            setCurrentPage(0);
+                            hideDrawer();
+                          }}
+                          className="text-clip text-base text-white"
+                        >
                           {element}
-                      </li>
-                    );
-                  })}
+                        </li>
+                      );
+                    })}
                 </ul>
               </div>
             </div>
@@ -146,26 +147,35 @@ const TotalPosts = () => {
 
         <div className="divider mt-8 shadow-sm"></div>
         <div className="mx-auto mt-8 hidden w-full flex-wrap justify-center gap-3 px-2 sm:flex">
-          {keywords.map((element) => {
-            return (
-              <button
-                key={element}
-                className="rounded-full p-2 pb-1 pt-1 text-center text-indigo-600 ring-2 sm:p-3 sm:pb-2 sm:pt-2"
-                onClick={() => {
-                  setTag(element);
-                  setCurrentPage(0);
-                }}
-              >
-                {element}
-              </button>
-            );
-          })}
+          {keywords.length != 0 &&
+            keywords.map((element) => {
+              return (
+                <button
+                  key={element}
+                  className="rounded-full p-2 pb-1 pt-1 text-center text-indigo-600 ring-2 sm:p-3 sm:pb-2 sm:pt-2"
+                  onClick={() => {
+                    setTag(element);
+                    setCurrentPage(0);
+                  }}
+                >
+                  {element}
+                </button>
+              );
+            })}
         </div>
 
         <div className="mt-14 grid justify-center gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {allPosts.map((element) => (
-            <TrendingCards element={element} key={element._id} />
-          ))}
+          {allPosts.length != 0 ? (
+            allPosts.map((element) => (
+              <TrendingCards element={element} key={element._id} />
+            ))
+          ) : (
+            <div className="text-2 flex h-60 w-full flex-col items-center justify-center">
+              <h1 className="text-2xl font-semibold text-primary lg:text-3xl ">
+                There are no posts available right now
+              </h1>
+            </div>
+          )}
         </div>
 
         <div className="mx-auto mb-8 mt-12 w-fit">

@@ -199,9 +199,18 @@ const PublicProfile = () => {
         Posts by {data.firstName}
       </h1>
             <div className="my-10 mx-3 grid justify-center gap-3 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
-          {data?.blogPosts && data?.blogPosts.map((element) => (
+          {data?.blogPosts && data?.blogPosts?.length != 0 && data?.blogPosts.map((element) => (
             <PostTemplate element={element} key={element._id} />
           ))}
+          {
+            (!data?.blogPosts || !data?.blogPosts?.length == 0) && (
+              <div className="flex flex-col items-center justify-center h-60 w-full text-2">
+          <h1 className="text-2xl font-semibold text-primary lg:text-3xl ">
+            There are no posts available right now
+          </h1>
+        </div>
+            )
+          }
         </div>
 
         <div className="mx-auto mb-8 mt-12 w-fit">

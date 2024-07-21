@@ -19,10 +19,18 @@ const Followers = () => {
     <>
     <h1 className="text-2xl lg:text-3xl font-semibold text-primary mb-10">All Your Followers</h1>
         <div className="grid justify-center gap-3 grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 ">
-        {Followers && Followers.map((data) => {
+        {Followers && Followers.length != 0 && Followers.map((data) => {
         return <FollowerCard key={data._id} data={data} />;
       })}
         </div>
+        {(!Followers || Followers.length == 0)  && 
+         (
+          <div className="flex flex-col items-center justify-center h-60 w-full text-2xl">
+            <h1 className="text-2xl font-semibold text-primary lg:text-3xl ">
+              You don't have any Follower yet.
+            </h1>
+          </div>
+        ) }
 
         <div className="mx-auto mb-8 mt-12 w-fit">
           <div className="join">
