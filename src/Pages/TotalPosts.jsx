@@ -164,11 +164,13 @@ const TotalPosts = () => {
             })}
         </div>
 
-        <div className="mt-14 grid justify-center gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        
           {allPosts.length != 0 ? (
-            allPosts.map((element) => (
+            <div className="mt-14 grid justify-center gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {allPosts.map((element) => (
               <TrendingCards element={element} key={element._id} />
-            ))
+            ))}
+            </div>
           ) : (
             <div className="text-2 flex h-60 w-full flex-col items-center justify-center">
               <h1 className="text-2xl font-semibold text-primary lg:text-3xl ">
@@ -176,7 +178,6 @@ const TotalPosts = () => {
               </h1>
             </div>
           )}
-        </div>
 
         <div className="mx-auto mb-8 mt-12 w-fit">
           <div className="join">

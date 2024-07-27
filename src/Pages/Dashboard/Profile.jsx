@@ -5,6 +5,7 @@ import { MdEditSquare } from "react-icons/md";
 import { IoSave } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { backgroundImage, fetchDash } from "../../Redux/authSlice";
+import convertUrl from "../../Helper/imageToWebp";
 
 const Profile = (props) => {
   const data = useSelector((state) => state?.auth?.data);
@@ -59,7 +60,7 @@ const Profile = (props) => {
           <div
             className="relative mb-14 min-h-52 w-full rounded shadow-md shadow-gray-600 sm:min-h-60 lg:mb-16 lg:min-h-72 xl:min-h-[350px]"
             style={{
-              backgroundImage: `url(${bgImage})`,
+              backgroundImage: `url(${convertUrl(bgImage)})`,
               backgroundSize: "Cover",
             }}
           >

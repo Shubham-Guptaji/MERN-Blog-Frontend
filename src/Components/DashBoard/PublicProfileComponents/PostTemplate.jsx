@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import convertUrl from "../../../Helper/imageToWebp";
 
 const PostTemplate = (props) => {
   const navigate = useNavigate();
@@ -6,7 +7,7 @@ const PostTemplate = (props) => {
         <div className="card max-w-96 bg-base-100 shadow-xl">
         <figure>
           <img
-            src={props.element.public_image.resource_url}
+            src={convertUrl(props.element.public_image.resource_url)}
             alt={props.element.title}
             height="1600px"
             width="900px"

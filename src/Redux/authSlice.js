@@ -373,6 +373,7 @@ const authSlice = createSlice({
                 state.profile.chartData = action?.payload?.chartData;
             })
             .addCase(deleteAccount.fulfilled, (state, action) => {
+                if(state?.role == "admin") return;
                 localStorage.clear();
                 state.isLoggedIn = false;
                 state.token = null;

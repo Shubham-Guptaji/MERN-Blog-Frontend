@@ -7,8 +7,8 @@ const BASE_URL = "http://localhost:5000/api/v1";
 
 const axiosInstance = axios.create();
  
-axiosInstance.defaults.baseURL = BASE_URL; // set the default base URL to be used by this instance of axios
-axiosInstance.defaults.withCredentials = true; // allows credentials such as cookies, authorization headers etc
+axiosInstance.defaults.baseURL = BASE_URL; 
+axiosInstance.defaults.withCredentials = true; 
 
 export default axiosInstance;
  

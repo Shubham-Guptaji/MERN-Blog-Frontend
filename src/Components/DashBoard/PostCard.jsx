@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { fetchDash } from "../../Redux/authSlice";
 import { deletePost, publishPost, unPublishPost } from "../../Redux/blogSlice";
+import convertUrl from "../../Helper/imageToWebp";
 const AuthRecent = ({ post }) => {
   const navigate = useNavigate();
   const { username } = useSelector((state) => state?.auth?.data);
@@ -36,7 +37,7 @@ const AuthRecent = ({ post }) => {
       <div className="card mb-3 bg-base-100 shadow-xl lg:card-side">
         <figure className="lg:w-3/12 ">
           <img
-            src={post.public_image.resource_url}
+            src={convertUrl(post.public_image.resource_url)}
             alt={post.title}
             height="1600px"
             width="900px"
@@ -118,14 +119,6 @@ const AuthRecent = ({ post }) => {
             {post.metaDescription}
           </p>
 
-          {/* <div className="card-actions mt-3 justify-end">
-            <Link
-              className="btn btn-primary bg-indigo-700 px-5 text-[17px] tracking-wider"
-              to={`/posts/${props.element.url}`}
-            >
-              Read
-            </Link>
-          </div> */}
         </div>
       </div>
     </>

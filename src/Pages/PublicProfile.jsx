@@ -13,6 +13,7 @@ import PostTemplate from "../Components/DashBoard/PublicProfileComponents/PostTe
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Follow, IsFollowing, UnFollow } from "../Redux/Miscellaneous";
 import imgBg from "../assets/imgBg.webp";
+import convertUrl from "../Helper/imageToWebp";
 
 const PublicProfile = () => {
   const username = useParams().username;
@@ -82,7 +83,7 @@ const PublicProfile = () => {
             <div
               className="relative mb-14 min-h-52 w-full rounded shadow-md shadow-gray-600 sm:min-h-60 lg:mb-16 lg:min-h-72 xl:min-h-[350px]"
               style={{
-                backgroundImage: `url(${bgImage})`,
+                backgroundImage: `url(${convertUrl(bgImage)})`,
                 backgroundSize: "Cover",
               }}
             >
@@ -202,8 +203,11 @@ const PublicProfile = () => {
           {data?.blogPosts && data?.blogPosts?.length != 0 && data?.blogPosts.map((element) => (
             <PostTemplate element={element} key={element._id} />
           ))}
-          {
-            (!data?.blogPosts || !data?.blogPosts?.length == 0) && (
+          
+        </div>
+
+        {
+            (!data?.blogPosts || data?.blogPosts?.length == 0) && (
               <div className="flex flex-col items-center justify-center h-60 w-full text-2">
           <h1 className="text-2xl font-semibold text-primary lg:text-3xl ">
             There are no posts available right now
@@ -211,7 +215,6 @@ const PublicProfile = () => {
         </div>
             )
           }
-        </div>
 
         <div className="mx-auto mb-8 mt-12 w-fit">
           <div className="join">

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import convertUrl from "../../Helper/imageToWebp";
 
 const FollowerCard = ({ data }) => {
   const navigate = useNavigate();

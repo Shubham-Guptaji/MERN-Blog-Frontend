@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
+import convertUrl from "../../Helper/imageToWebp";
 const Carousel = ({ post }) => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,7 +38,7 @@ const Carousel = ({ post }) => {
                 }}
               >
                 <img
-                  src={element.public_image.resource_url}
+                  src={convertUrl(element.public_image.resource_url)}  
                   alt={element.title}
                   className="aspect-video  h-auto w-full object-cover "
                 />
@@ -60,7 +61,7 @@ const Carousel = ({ post }) => {
           </div>
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 ms-2 -translate-y-1/2 transform rounded bg-white p-2 shadow shadow-black"
+            className={`absolute left-0 top-1/2  ms-2 -translate-y-1/2 transform rounded bg-white p-2 shadow shadow-black ${(post && post.length < 2) && "hidden"}`}
           >
             <span>
               <FaAnglesLeft className="h-6 w-6" />
@@ -68,7 +69,7 @@ const Carousel = ({ post }) => {
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 me-2 -translate-y-1/2 transform rounded bg-white p-2 shadow shadow-black"
+            className={`absolute right-0 top-1/2 me-2 -translate-y-1/2 transform rounded bg-white p-2 shadow shadow-black ${(post && post.length < 2) && "hidden"}`}
           >
             <span>
               <FaAnglesRight className="h-6 w-6" />

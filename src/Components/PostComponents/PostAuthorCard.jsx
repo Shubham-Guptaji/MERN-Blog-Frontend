@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Follow, UnFollow } from "../../Redux/Miscellaneous";
 import { Link } from "react-router-dom";
+import convertUrl from "../../Helper/imageToWebp";
 
 const PostAuthorCard = ({postDetails}) => {
     const dispatch = useDispatch();

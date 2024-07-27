@@ -25,6 +25,7 @@ import PostHead from "../../Components/PostComponents/PostHead";
 import PostDeletion from "../../Components/PostComponents/PostDeletion";
 import SharePost from "../../Components/PostComponents/SharePost";
 import PostAuthorCard from "../../Components/PostComponents/PostAuthorCard";
+import convertUrl from "../../Helper/imageToWebp";
 const Post = () => {
   const url = useParams().url;
   const userId = useSelector((state) => state?.auth?.data?.id);
@@ -140,7 +141,7 @@ const Post = () => {
 
             <div className="relative w-full">
               <img
-                src={postDetails.public_image.resource_url}
+                src={convertUrl(postDetails.public_image.resource_url)}
                 alt={postDetails.title}
                 className="mx-auto my-4 h-auto w-full rounded-xl p-2"
                 width="1920"

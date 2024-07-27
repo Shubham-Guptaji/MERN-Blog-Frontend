@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import convertUrl from "../../Helper/imageToWebp";
 const AuthRecent = (props) => {
   const navigate = useNavigate();
   return (
@@ -6,7 +7,7 @@ const AuthRecent = (props) => {
       <div className="card mb-3 bg-base-100 shadow-xl lg:card-side">
         <figure className="lg:w-3/12 ">
           <img
-            src={props.element.public_image.resource_url}
+            src={convertUrl(props.element.public_image.resource_url)}
             alt={props.element.title}
             height="1600px"
             width="900px"
@@ -44,14 +45,6 @@ const AuthRecent = (props) => {
             {props.element.metaDescription}
           </p>
 
-          {/* <div className="card-actions mt-3 justify-end">
-            <Link
-              className="btn btn-primary bg-indigo-700 px-5 text-[17px] tracking-wider"
-              to={`/posts/${props.element.url}`}
-            >
-              Read
-            </Link>
-          </div> */}
         </div>
       </div>
     </>
