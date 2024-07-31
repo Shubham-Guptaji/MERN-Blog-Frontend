@@ -11,11 +11,11 @@ const GoogleAuthBtn = (props) => {
 		try {
 			if (authResult["code"]) {
 				console.log(authResult, authResult.code);
-				// const result = await googleAuth(authResult.code);
+				const result = await googleAuth(authResult.code);
                 console.log('code', authResult.code, )
 				// props.setUser(result.data.data.user);
-				alert("successfuly logged in");
-				navigate(`/api/auth/google?code=${authResult.code}`)
+				// alert("successfuly logged in");
+				// navigate(`/api/auth/google?code=${authResult.code}`)
 			} else {
 				console.log(authResult);
 				throw new Error(authResult);
