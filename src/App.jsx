@@ -23,6 +23,7 @@ import VerifyAccount from "./Pages/VerifyAccount";
 import AuthToken from "./utils/AuthToken";
 import ChangePassword from "./Pages/Dashboard/ChangePassword";
 import PublicProfile from "./Pages/PublicProfile";
+import REDIRECT_PAGE from "./utils/GoogleRedirectPage";
 
 function App() {
   return (
@@ -81,6 +82,7 @@ function App() {
         <Route path="/user/:username/account/verify/:token" element={<VerifyAccount />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/username/:username" element={<PublicProfile />} />
+        <Route path="/api/auth/google" element={<REDIRECT_PAGE />} />
         
         <Route element={<NotRequireAuth />} >
           <Route path="/sign-up" element={<SignUp />} />

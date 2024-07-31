@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SignUpImg from "../assets/sign-up.svg";
 import Layout from "../Layout/Layout";
 import { createAccount } from "../Redux/authSlice";
+import GoogleAuthBtn from "../utils/GoogleLogin";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -253,6 +254,7 @@ const SignUp = () => {
               <button type="submit" className="btn btn-primary  mt-7">
                 Create
               </button>
+              <GoogleAuthBtn />
               <p className="mt-3 max-w-xs">
                 Already have an account ?&nbsp;{" "}
                 <Link to={"/sign-in"} className="cursor-pointer text-indigo-500">
