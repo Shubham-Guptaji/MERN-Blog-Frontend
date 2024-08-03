@@ -1,27 +1,29 @@
 import React from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../Helper/axiosInstance";
+import toast from "react-hot-toast";
+import { googleAuth } from "../Redux/authSlice";
+import { FcGoogle } from "react-icons/fc";
+import { useDispatch } from "react-redux";
                               
 
 const GoogleAuthBtn = (props) => {
-    const googleAuth = (code) => axiosInstance.get(`/user/google/callback?code=${code}`);
-	const navigate = useNavigate()
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const responseGoogle = async (authResult) => {
 		try {
 			if (authResult["code"]) {
-				console.log(authResult, authResult.code);
-				const result = await googleAuth(authResult.code);
-                console.log('code', authResult.code, )
-				// props.setUser(result.data.data.user);
-				// alert("successfuly logged in");
-				// navigate(`/api/auth/google?code=${authResult.code}`)
+				const response = await dispatch(googleAuth({code: authResult.code, login: props.login}));
+				if (response?.payload?.success) {			  
+					navigate("/dashboard");
+				  }
 			} else {
 				console.log(authResult);
 				throw new Error(authResult);
 			}
 		} catch (e) {
 			console.log(e);
+			toast.error("Some Error Occured. Please try again after some time.")
 		}
 	};
 
@@ -33,13 +35,11 @@ const GoogleAuthBtn = (props) => {
 
 	return (
 		<button
-			style={{
-				padding: "10px 20px",
-			}}
+			className="btn my-5 mx-auto flex border border-gray-600"
             type="button"
 			onClick={googleLogin}
 		>
-			Sign in with Google
+			Sign {props.login ? "in" : "up"} with Google <span><FcGoogle className="w-6 h-6" /></span>
 		</button>
 	);
 };

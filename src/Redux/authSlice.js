@@ -300,6 +300,25 @@ export const UnBlockUser = createAsyncThunk("/user/unblock", async (data) => {
         }
 })
 
+export const googleAuth = createAsyncThunk("/user/google/auth", async (data) => {
+    try {
+        
+        let res = axiosInstance.get(`/user/google/auth?code=${data.code}`);
+        toast.promise(res, {
+            loading: data.login ? "Logging in to your account..." : "Creating Your Account ...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: data.login ? "Failed to login to your account." : "Failed to create your account."
+        })
+        res = await res;
+        return res?.data;
+    }catch (error) {
+        toast.error(error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message)
+    }
+})
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -318,6 +337,18 @@ const authSlice = createSlice({
                 state.token = action?.payload?.user?.tokens;
             })
             .addCase(loginAccount.fulfilled, (state, action) => {
+                localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
+                localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
+                localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");
+
+                localStorage.setItem("token", action?.payload?.user?.tokens ? JSON.stringify(action?.payload?.user?.tokens) : "");
+
+                state.isLoggedIn = action?.payload?.success;
+                state.data = action?.payload?.user;
+                state.role = action?.payload?.user?.role;
+                state.token = action?.payload?.user?.tokens;
+            })
+            .addCase(googleAuth.fulfilled, (state, action) => {
                 localStorage.setItem("data", action?.payload?.user ? JSON.stringify(action?.payload?.user) : "");
                 localStorage.setItem("isLoggedIn", action?.payload?.success ? action?.payload?.success : false);
                 localStorage.setItem("role", action?.payload?.user?.role ? action?.payload?.user?.role : "");

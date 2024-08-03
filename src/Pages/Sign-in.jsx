@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import Layout from "../Layout/Layout";
 import { loginAccount } from "../Redux/authSlice";
+import GoogleAuthBtn from "../utils/GoogleLogin";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const SignIn = () => {
         </p>
         <form
           onSubmit={submitHandler}
-          className="mx-auto flex flex-col gap-y-6 bg-white px-4 sm:px-8 lg:px-12 py-12 mt-3 shadow rounded-md"
+          className="mx-auto flex flex-col gap-y-6 bg-white px-4 sm:px-8 lg:px-12 py-12 mt-3 shadow rounded-lg"
         >
           <label className="form-control w-full max-w-md" htmlFor="username">
             <div className="label">
@@ -83,12 +84,12 @@ const SignIn = () => {
             />
           </label>
 
-          <button
-            type="submit"
-            className="btn btn-primary mt-7 bg-indigo-600 text-lg text-white"
-          >
-            Log In
-          </button>
+          <div className="w-full max-w-xs">
+              <button type="submit" className="btn btn-primary mx-auto flex mt-2">
+                Sign In
+              </button>
+              <GoogleAuthBtn login={true} />
+              </div>
           <div>
           <p className="mt-3 max-w-xs">
             Don&apos;t have an account ?&nbsp;{" "}

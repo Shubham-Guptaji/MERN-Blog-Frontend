@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { fetchDash, updateProfile } from "../../Redux/authSlice";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useState } from "react";
@@ -12,6 +12,7 @@ const EditProfile = (props) => {
         firstName: data?.firstName,
         lastName: data?.lastName,
         bio: data?.bio,
+        username: data?.username,
         email: data?.email,
         avatar: null,
         previewImage: data?.avatar?.secure_url,
@@ -72,6 +73,7 @@ const EditProfile = (props) => {
       formdata.append("lastName", userInput.lastName);
       formdata.append("bio", userInput.bio);
       formdata.append("email", userInput.email);
+      formdata.append("username", userInput.username);
       if(userInput.avatar) formdata.append("avatar", userInput.avatar);
       // calling the api
       let res = await dispatch(updateProfile(formdata));
@@ -86,7 +88,7 @@ const EditProfile = (props) => {
         avatar: null,
         previewImage: null,
       });
-      await dispatch(fetchDash({username: data?.username}));
+      await dispatch(fetchDash({username: res?.payload?.user?.username}));
       props.changePage(6);
     }
 }
@@ -95,7 +97,7 @@ const EditProfile = (props) => {
              <div className="flex items-center justify-center min-h-[100vh] lg:min-h-[auto] sm:h-[80vh] px-2">
         <form
           onSubmit={handleFormSubmit}
-          className="flex flex-col justify-center gap-5 rounded-lg p-4  bg-indigo-500 text-white w-[700px] sm:min-h-[auto] min-h-[750px] sm:h-[470px] my-16 sm:my-10 shadow-[0_0_10px_black] relative"
+          className="flex flex-col justify-center gap-5 rounded-lg p-4  bg-indigo-500 text-white w-[700px] sm:min-h-[auto] min-h-[750px] sm:h-[540px] my-16 sm:my-10 shadow-[0_0_10px_black] relative"
         >
 
           <button
@@ -110,6 +112,8 @@ const EditProfile = (props) => {
             <span>Update Profile</span>
           </h1>
 
+          
+
           <main className="sm:grid sm:grid-cols-2 gap-x-2 sm:gap-x-10">
             <div className="space-y-6">
               <div
@@ -117,7 +121,7 @@ const EditProfile = (props) => {
                 <label className="cursor-pointer" htmlFor="image_uploads">
                   {userInput.previewImage ? (
                     <img
-                      className="w-full h-44 m-auto border"
+                      className="w-full h-56 m-auto border"
                       src={userInput.previewImage}
                       alt="preview "
                     />
@@ -157,6 +161,23 @@ const EditProfile = (props) => {
             </div>
 
             <div className="flex flex-col gap-1">
+
+            <div className="flex flex-col gap-1 w-full max-w-xs mx-auto ">
+                <label className="text-lg font-semibold" htmlFor="Username">
+                  Username
+                </label>
+                <input
+                  required
+                  type="name"
+                  name="username"
+                  id="Username"
+                  placeholder="Enter the Username"
+                  className="bg-transparent px-2 py-1 border"
+                  value={userInput.username}
+                  onChange={handleUserInput}
+                />
+              </div>
+
               <div className="flex flex-col gap-1">
                 <label className="text-lg font-semibold" htmlFor="firstName">
                   First Name

@@ -251,10 +251,12 @@ const SignUp = () => {
                   value={signupData.password}
                 />
               </label>
-              <button type="submit" className="btn btn-primary  mt-7">
+              <div className="w-full max-w-xs">
+              <button type="submit" className="btn btn-primary mx-auto flex mt-7">
                 Create
               </button>
-              <GoogleAuthBtn />
+              <GoogleAuthBtn login={false} />
+              </div>
               <p className="mt-3 max-w-xs">
                 Already have an account ?&nbsp;{" "}
                 <Link to={"/sign-in"} className="cursor-pointer text-indigo-500">
