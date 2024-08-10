@@ -13,7 +13,7 @@ const PostHead = ({ postDetails, url }) => {
       {/* Set the title of the page */}
       <title>{postDetails?.title}</title>
       {/* Set the favicon */}
-      <link rel="icon" type="image/x-icon" href="./Alcodemy.png" />
+      <link rel="icon" type="image/x-icon" href="/Alcodemy.png" />
 
       {/* Set the og:type meta tag with the value 'website' */}
       <meta property="og:type" content="website" />
