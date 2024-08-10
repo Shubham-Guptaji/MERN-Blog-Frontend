@@ -1,3 +1,4 @@
+// Component to convert image format to webp
 export default function convertUrl(url) {
     try {
         // Regular expression to match image URLs

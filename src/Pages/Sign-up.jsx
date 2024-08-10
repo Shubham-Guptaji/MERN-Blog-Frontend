@@ -9,9 +9,12 @@ import Layout from "../Layout/Layout";
 import { createAccount } from "../Redux/authSlice";
 import GoogleAuthBtn from "../utils/GoogleLogin";
 
+// SignUp component
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // Initialize signupData state with empty fields
   const [signupData, setSignupData] = useState({
     username: "",
     firstname: "",
@@ -21,10 +24,10 @@ const SignUp = () => {
     avatar: "",
   });
 
+  // Initialize previewImage state to store the uploaded image URL
   const [previewImage, setImagePreview] = useState("");
 
-  // Handling  form data on change
-
+  // Handle form data changes
   const changeHandler = (e) => {
     const { name, value } = e.target;
 
@@ -35,13 +38,13 @@ const SignUp = () => {
     });
   };
 
-  // function to handle the image upload
+  // Handle image upload
   const getImage = (event) => {
     event.preventDefault();
-    // getting the image
+    // Get the uploaded image
     const uploadedImage = event.target.files[0];
 
-    // if image exists then getting the url link of it
+    // If image exists, update the signupData state and previewImage state
     if (uploadedImage) {
       setSignupData({
         ...signupData,
@@ -55,11 +58,11 @@ const SignUp = () => {
     }
   };
 
-  // Submitting the sign up form
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // checking the empty fields
+    // Check for empty fields
     if (
       !signupData.avatar ||
       !signupData.email ||
@@ -72,36 +75,31 @@ const SignUp = () => {
       return;
     }
 
-    // checking the name field length
+    // Check username length
     if (signupData.username.length < 5) {
       toast.error("Username should be atleast of 5 characters");
       return;
     }
 
+    // Check full name length
     if ((signupData.firstname + " " + signupData.lastname).length < 5) {
-      toast.error(
-        "Firstname and Lastname should be atleast of 5 characters together"
-      );
+      toast.error("Firstname and Lastname should be atleast of 5 characters together");
       return;
     }
 
-    if (
-      !signupData.email.match(
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-      )
-    ) {
+    // Check email validity
+    if (!signupData.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
       toast.error("Invalid Email Id");
       return;
     }
 
-    // password validation using regex
+    // Check password validity using regex
     if (!signupData.password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/)) {
-      toast.error(
-        "Minimum password length should be 8 with Uppercase, Lowercase, Number and Symbol"
-      );
+      toast.error("Minimum password length should be 8 with Uppercase, Lowercase, Number and Symbol");
       return;
     }
 
+    // Create a new FormData object
     const formdata = new FormData();
     formdata.append("username", signupData.username);
     formdata.append("firstName", signupData.firstname);
@@ -110,11 +108,12 @@ const SignUp = () => {
     formdata.append("password", signupData.password);
     formdata.append("avatar", signupData.avatar);
 
-    // calling create account action
+    // Call createAccount action
     const res = await dispatch(createAccount(formdata));
-    // redirect to login page if true
+
+    // Redirect to dashboard if account creation is successful
     if (res?.payload?.success) {
-      // clearing the signup inputs
+      // Clear the signup inputs
       setSignupData({
         username: "",
         email: "",
@@ -128,6 +127,7 @@ const SignUp = () => {
       navigate("/dashboard");
     }
   };
+
   return (
     <Layout>
       <div className="hero min-h-screen bg-base-200">

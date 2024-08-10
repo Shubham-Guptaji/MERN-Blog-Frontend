@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Layout from "../Layout/Layout";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,6 +17,7 @@ import imgBg from "../assets/imgBg.webp";
 import convertUrl from "../Helper/imageToWebp";
 
 const PublicProfile = () => {
+  // Get the username from the URL params
   const username = useParams().username;
   const navigate = useNavigate();
   const areMore = useSelector(state => state?.auth?.profile?.areMore);
@@ -30,13 +32,19 @@ const PublicProfile = () => {
   const isBlocked = data?.isBlocked;
   const isFollowing = useSelector((state) => state?.misc?.isFollowing);
   const followId = useSelector((state) => state?.misc?.followId);
+  
+  // Set the background image for the profile header
   let bgImage = data?.bgImage?.secure_url ? data?.bgImage?.secure_url : imgBg;
-  async function deletionHandler () {
+
+  // Handle account deletion
+  async function deletionHandler() {
     let res = await dispatch(deleteAccount({id: userId}));
     if(res?.payload?.success) {
-        navigate('/posts')
+      navigate('/posts')
     }
   }
+
+  // Handle follow/unfollow button click
   const followHandler = async () => {
     if (!isLoggedIn) return toast.error("Login to follow..");
     if (!isVerified) return toast.error("Your account isn't verified yet");
@@ -44,12 +52,15 @@ const PublicProfile = () => {
       Follow({ authId: userId })
     );
   };
+
   const unfollowHandler = async () => {
     if (!isLoggedIn || !followId)
       return toast.error("You should be loggedin with followId.");
     dispatch(UnFollow({ FollowId: followId }));
   };
-  async function blockUnblockUserfn () {
+
+  // Handle block/unblock user button click
+  async function blockUnblockUserfn() {
     if (!isLoggedIn) return toast.error("Login to block..");
     if (role != "admin") return toast.error("You are not authorized to do this.")
     if (data) {
@@ -59,11 +70,13 @@ const PublicProfile = () => {
   }
 
   useEffect(() => {
+    // Check if the user is logged in, if not redirect to sign-in page
     if(!isLoggedIn) {
       toast.error("Login to see Author Profile");
       navigate("/sign-in");
       return
     }
+    // Fetch the user's profile data
     const effectFn = async () => {
       let obj = { skip: currentPage * 20 };
       const res = await dispatch(fetchDash({ username, obj }));
@@ -75,6 +88,7 @@ const PublicProfile = () => {
     };
     effectFn();
   }, [currentPage]);
+
   return (
     <Layout>
       {data && (

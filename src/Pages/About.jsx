@@ -2,6 +2,7 @@
 import AboutImg from "../assets/about.svg";
 import Layout from "../Layout/Layout";
 
+// About component
 const About = () => {
   return (
     <Layout>

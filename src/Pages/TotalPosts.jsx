@@ -10,14 +10,18 @@ import TrendingCards from "../Components/Home/Trending-Cards";
 import Layout from "../Layout/Layout";
 import { allblogposts, searchTag } from "../Redux/blogSlice";
 
+// Component to display all blog posts
 const TotalPosts = () => {
   const dispatch = useDispatch();
   let { state } = useLocation();
   const [tag, setTag] = useState(state ? state.tag : null);
+  // Get all posts, areMore flag, and keywords from Redux store
   const { allPosts, areMore, keywords } = useSelector((state) => state.blog);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchInput, setSearchInput] = useState("");
   const [timer, setTimer] = useState(null);
+
+  // Handle input change in search field
   const handleInput = (event) => {
     const value = event?.target?.value;
     // Clear the existing timer
@@ -31,6 +35,7 @@ const TotalPosts = () => {
     setSearchInput((prevInput) => value);
   };
 
+  // Handle search form submission
   const handleSearch = (event) => {
     event.preventDefault();
     if (searchInput == "") {
@@ -39,6 +44,8 @@ const TotalPosts = () => {
     }
     dispatch(searchTag(searchInput));
   };
+
+  // Hide the drawer when the close button is clicked
   const hideDrawer = () => {
     const element = document.getElementsByClassName("drawer-toggle");
     element[0].checked = false;
@@ -48,18 +55,20 @@ const TotalPosts = () => {
     drawerSide[0].style.width = 0;
   };
 
-  // function for changing the drawer width on menu button click
+  // Change the drawer width when the menu button is clicked
   const changeWidth = () => {
     const drawerSide = document.getElementsByClassName("drawer-side");
     drawerSide[0].style.width = "auto";
   };
 
+  // Fetch posts when the component mounts or when the tag or current page changes
   useEffect(() => {
     if (tag != null) {
       dispatch(searchTag({ tag: tag, skip: currentPage * 20 }));
     } else dispatch(allblogposts(currentPage * 20));
     window.scrollTo(0, 0);
   }, [currentPage, tag]);
+  
   return (
     <Layout>
       <div className="container mx-auto my-3 px-3 md:w-10/12">

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import Layout from "../Layout/Layout";
 
+// Component for displaying a 403 Access Denied page
 const Denied = () => {
   const navigate = useNavigate();
   return (

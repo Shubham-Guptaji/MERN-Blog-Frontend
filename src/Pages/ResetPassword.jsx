@@ -8,44 +8,67 @@ import forgotImg from "../assets/undraw_code_typing_re_p8b9.svg";
 import axiosInstance from "../Helper/axiosInstance";
 import Layout from "../Layout/Layout";
 
+/**
+ * Reset Password component
+ * Handles password reset functionality
+ */
 const ResetPassword = () => {
-    const token = useParams().token;
-    const isLoggedIn = useSelector(state => state?.auth?.isLoggedIn);
-    const navigate = useNavigate();
-    const [data, setData] = useState({
-        password: "",
-        confirmpassword: ""
-    })
-    const submitHandler = async (events) => {
-        events.preventDefault();
-        if(data.password.length < 8 ) {
-            return toast.error("Password must be at least 8 characters long.");
-        } else if (!data.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={}\[\]:;<>?,./\\-]).{8,}$/)){
-            return toast.error("Password should be longer than 8 alphanumberic small and capital characters with special characters.")
-        }else if(data.password != data.confirmpassword) {
-            return toast.error("Passwords and Confirm Password do not match.");
-        } 
-        try {
-            let res = axiosInstance.post(`/user/reset/${token}`, data);
-            toast.promise(res, {
-                loading: "Loading...",
-                success: (data) => {
-                    return data?.data?.message;
-                },
-                error: "Failed to change the password.",
-            });
-            res = await res;
-            if(res?.data?.success) {
-                setData({
-                    password: "",
-                    confirmpassword: ""
-                })
-                if(!isLoggedIn) navigate("/sign-in")
-            }
-        } catch (error) {
-            toast.error(error?.response?.data?.message);
-        }
+  // Get token from URL params
+  const token = useParams().token;
+  // Check if user is logged in
+  const isLoggedIn = useSelector(state => state?.auth?.isLoggedIn);
+  // Navigate to different routes
+  const navigate = useNavigate();
+  // State to store password and confirm password
+  const [data, setData] = useState({
+    password: "",
+    confirmpassword: ""
+  })
+
+  /**
+   * Submit handler for password reset form
+   * @param {Event} events - Form submit event
+   */
+  const submitHandler = async (events) => {
+    events.preventDefault();
+    // Check password length
+    if(data.password.length < 8 ) {
+      return toast.error("Password must be at least 8 characters long.");
+    } 
+    // Check password format
+    else if (!data.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={}\[\]:;<>?,./\\-]).{8,}$/)){
+      return toast.error("Password should be longer than 8 alphanumberic small and capital characters with special characters.")
     }
+    // Check if password and confirm password match
+    else if(data.password != data.confirmpassword) {
+      return toast.error("Passwords and Confirm Password do not match.");
+    } 
+    try {
+      // Make API call to reset password
+      let res = axiosInstance.post(`/user/reset/${token}`, data);
+      // Show toast message based on API response
+      toast.promise(res, {
+        loading: "Loading...",
+        success: (data) => {
+          return data?.data?.message;
+        },
+        error: "Failed to change the password.",
+      });
+      res = await res;
+      // If password reset is successful, clear form data and navigate to login page if not logged in
+      if(res?.data?.success) {
+        setData({
+          password: "",
+          confirmpassword: ""
+        })
+        if(!isLoggedIn) navigate("/sign-in")
+      }
+    } catch (error) {
+      // Show error message if API call fails
+      toast.error(error?.response?.data?.message);
+    }
+  }
+
   return (
     <Layout>
       <div className="bg-slate-200">

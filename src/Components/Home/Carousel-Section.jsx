@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 import convertUrl from "../../Helper/imageToWebp";
+
 const Carousel = ({ post }) => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Auto-advance the carousel every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % post.length);
@@ -14,10 +16,12 @@ const Carousel = ({ post }) => {
   }, []);
 
   const nextSlide = () => {
+    // Move to the next slide
     setCurrentIndex((prevIndex) => (prevIndex + 1) % post.length);
   };
 
   const prevSlide = () => {
+    // Move to the previous slide
     setCurrentIndex((prevIndex) => (prevIndex - 1 + post.length) % post.length);
   };
 

@@ -12,6 +12,7 @@ const initialState = {
     meFollow: null,
 }
 
+// Component for counting total like on a post
 export const PostLike = createAsyncThunk("/likecount", async (data) => {
     try {
         let res = axiosInstance.post('/likecount', data);
@@ -22,6 +23,7 @@ export const PostLike = createAsyncThunk("/likecount", async (data) => {
     }
 })
 
+// Component to like a certain post
 export const LikeHandler = createAsyncThunk("/like", async (data) => {
     try {
         let res = axiosInstance.get(`/like/${data.postId}`);
@@ -39,6 +41,7 @@ export const LikeHandler = createAsyncThunk("/like", async (data) => {
     }
 });
 
+// Component to dislike a certain post
 export const DisLikeHandler = createAsyncThunk("/dislike", async (data) => {
     try {
         let res = axiosInstance.delete(`/dislike/${data.postId}`);
@@ -56,16 +59,10 @@ export const DisLikeHandler = createAsyncThunk("/dislike", async (data) => {
     }
 });
 
+// Component to know if current user is following the author
 export const IsFollowing = createAsyncThunk("/isfollowing", async (data) => {
     try {
         let res = axiosInstance.post(`/isfollowing/`, data);
-        // toast.promise(res, { 
-        //   loading: "Loading...",
-        //   success: (data) => {
-        //     return data?.data?.message;
-        //   },
-        //   error: "Failed to get the follow status",
-        // });
         res = await res;
         return res?.data;
     } catch (error) {
@@ -73,6 +70,7 @@ export const IsFollowing = createAsyncThunk("/isfollowing", async (data) => {
     }
 });
 
+// Component to follow the post author
 export const Follow = createAsyncThunk("/follow", async (data) => {
     try {
         let res = axiosInstance.post(`/follower/follow`, data);
@@ -90,6 +88,7 @@ export const Follow = createAsyncThunk("/follow", async (data) => {
     }
 });
 
+// Component to follow an author
 export const UnFollow = createAsyncThunk("/unfollow", async (data) => {
     try {
         let res = axiosInstance.delete(`/follower/unfollow/${data.FollowId}`, data);
@@ -107,6 +106,7 @@ export const UnFollow = createAsyncThunk("/unfollow", async (data) => {
     }
 });
 
+// Component to get list of current user's followers
 export const myFollowers = createAsyncThunk("/my-followers", async (data) => {
     try {
         let skip = data?.skip || 0;
@@ -125,6 +125,7 @@ export const myFollowers = createAsyncThunk("/my-followers", async (data) => {
     }
 })
 
+// Component to list all the authors whom current user follows
 export const meFollowing = createAsyncThunk("/me-following", async (data) => {
     try {
         let skip = data?.skip || 0;
@@ -143,6 +144,7 @@ export const meFollowing = createAsyncThunk("/me-following", async (data) => {
     }
 })
 
+// Miscellaneous Slice
 const miscSlice = createSlice({
     name: "misc",
     initialState,

@@ -21,11 +21,15 @@ import DeleteAccount from "./DeleteAccount";
 import EditProfile from "./EditProfile";
 import AllUsers from "./AllUsers";
 
+// Dashboard layout component
 const DashLayout = () => {
-  const {username, isVerified, role} = useSelector((state) => state?.auth?.data);
+  // Get user data from Redux store
+  const { username, isVerified, role } = useSelector((state) => state?.auth?.data);
   const [currentPage, setCurrentPage] = useState(1);
   const [subNavState, setSubNavState] = useState(true);
   const dispatch = useDispatch();
+
+  // Function to hide the drawer
   const hideDrawer = () => {
     const element = document.getElementsByClassName("drawer-toggle");
     element[0].checked = false;
@@ -36,17 +40,25 @@ const DashLayout = () => {
     setSubNavState(false);
   };
 
-  // function for changing the drawer width on menu button click
+  // Function to change the drawer width on menu button click
   const changeWidth = () => {
     const drawerSide = document.getElementsByClassName("drawer-side");
     drawerSide[0].style.width = "auto";
     setSubNavState(true);
   };
+
+  // Array of components to render based on current page
   const arr = [0, Dash, AllUsers, AllPost, Followers, Following, Profile, DeleteAccount, EditProfile];
-  function ChangePage (pageNo) {
+
+  // Function to change the current page
+  function ChangePage(pageNo) {
     setCurrentPage(pageNo);
   }
+
+  // Get the current component to render
   const ComponentData = arr[currentPage];
+
+  // Fetch dashboard data on mount
   useEffect(() => {
     dispatch(fetchDash({ username }));
   }, [])
@@ -55,35 +67,37 @@ const DashLayout = () => {
     <Layout>
       <div className="container mx-auto lg:mt-3 mb-3 px-3 md:w-10/12">
         <div className=" mb-8 lg:flex flex-col gap-3 lg:my-5 sm:flex-row">
-        {/* <div className="drawer z-30 bg-primary lg:hidden sticky top-12 md:top-[60px]"> */}
-        <div className={`drawer ${subNavState ? "z-30" : "z-10" } md:z-30 bg-primary lg:hidden sticky top-12 md:top-[60px]`}>
-              <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-              <div className="drawer-content me-auto bg-primary block z-0 px-3 py-1 ">
-                <label htmlFor="my-drawer" className="flex items-center gap-2 relative cursor-pointer">
-                  <FiMenu
-                    onClick={changeWidth}
-                    size={"28px"}
-                    className="font-bold text-white "
-                  /> <span className="text-white text-lg">Menu</span>
-                </label>
-              </div>
-              <div className="drawer-side">
-                <label
-                  htmlFor="my-drawer"
-                  aria-label="close sidebar"
-                  className="drawer-overlay"
-                ></label>
+          {/* Mobile navigation drawer */}
+          <div className={`drawer ${subNavState ? "z-30" : "z-10" } md:z-30 bg-primary lg:hidden sticky top-12 md:top-[60px]`}>
+            <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+            <div className="drawer-content me-auto bg-primary block z-0 px-3 py-1 ">
+              <label htmlFor="my-drawer" className="flex items-center gap-2 relative cursor-pointer">
+                <FiMenu
+                  onClick={changeWidth}
+                  size={"28px"}
+                  className="font-bold text-white "
+                /> <span className="text-white text-lg">Menu</span>
+              </label>
+            </div>
+            <div className="drawer-side">
+              <label
+                htmlFor="my-drawer"
+                aria-label="close sidebar"
+                className="drawer-overlay"
+              ></label>
 
-                <ul className="menu min-h-full w-72 bg-gray-100 p-4 text-base-content">
-                  <li className="absolute right-2 w-fit cursor-pointer">
-                    <button onClick={hideDrawer}>
-                      <AiFillCloseCircle
-                        size={24}
-                        className=" cursor-pointer text-primary"
-                      />
-                    </button>
-                  </li>
-                  <span className="mt-12"></span>
+              <ul className="menu min-h-full w-72 bg-gray-100 p-4 text-base-content">
+                <li className="absolute right-2 w-fit cursor-pointer">
+                  <button onClick={hideDrawer}>
+                    <AiFillCloseCircle
+                      size={24}
+                      className=" cursor-pointer text-primary"
+                    />
+                  </button>
+                </li>
+                <span className="mt-12"></span>
+
+                {/* Navigation links */}
 
                   
                   <li>

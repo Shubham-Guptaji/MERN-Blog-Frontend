@@ -13,22 +13,26 @@ const AllUsers = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
-  function HandleSearchTerm (value) {
-        if (value != "") dispatch(GetRegisteredUser({ searchTerm: value, skip: 0 }));
-        else dispatch(AllRegisteredUser({ currentPage: 0 }));
-        setCurrentPage(0);
-        setSearchTerm((prevInput) => value); 
+  // Handle search input changes
+  function HandleSearchTerm(value) {
+    if (value != "") dispatch(GetRegisteredUser({ searchTerm: value, skip: 0 }));
+    else dispatch(AllRegisteredUser({ currentPage: 0 }));
+    setCurrentPage(0);
+    setSearchTerm((prevInput) => value);
   }
 
-  function ChangePage(page){
+  // Handle pagination changes
+  function ChangePage(page) {
     setCurrentPage(page);
     if (searchTerm != "") dispatch(GetRegisteredUser({ searchTerm, skip: currentPage }));
     else dispatch(AllRegisteredUser({ currentPage }));
   }
 
+  // Fetch initial data on component mount
   useEffect(() => {
     dispatch(AllRegisteredUser({ currentPage: 0 }));
   }, []);
+
   return (
     <>
       <h1 className="mb-3 text-2xl font-semibold text-primary lg:text-3xl ">
@@ -61,7 +65,6 @@ const AllUsers = () => {
         <div className="join">
           <button
             className={`btn join-item ${currentPage <= 0 ? "btn-disabled" : ""}`}
-            // onClick={() => setCurrentPage(currentPage - 1)}
             onClick={() => ChangePage(currentPage - 1)}
           >
             <FiChevronLeft className="h-5 w-5" aria-hidden="true" />
@@ -71,7 +74,6 @@ const AllUsers = () => {
           </button>
           <button
             className={`btn join-item ${!areMore ? "btn-disabled" : ""}`}
-            // onClick={() => setCurrentPage(currentPage + 1)}
             onClick={() => ChangePage(currentPage + 1)}
           >
             <FiChevronRight className="h-5 w-5" aria-hidden="true" />

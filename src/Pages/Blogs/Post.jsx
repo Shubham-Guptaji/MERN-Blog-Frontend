@@ -7,7 +7,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-
+// Importing components and helpers
 import Layout from "../../Layout/Layout";
 import { getPost } from "../../Redux/blogSlice";
 import { fetchComments } from "../../Redux/CommentSlice";
@@ -26,29 +26,38 @@ import PostDeletion from "../../Components/PostComponents/PostDeletion";
 import SharePost from "../../Components/PostComponents/SharePost";
 import PostAuthorCard from "../../Components/PostComponents/PostAuthorCard";
 import convertUrl from "../../Helper/imageToWebp";
+
 const Post = () => {
+  // Getting URL and user ID from params and state
   const url = useParams().url;
   const userId = useSelector((state) => state?.auth?.data?.id);
   const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
   const role = useSelector((state) => state?.auth?.data?.role) || null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Selecting likes, isLiked, and post comments from state
   const likes = useSelector((state) => state?.misc?.postLikes);
   const isLiked = useSelector((state) => state?.misc?.isLiked);
   const postComments = useSelector((state) => state?.comment?.comments);
   const recentPosts = useSelector(
     (state) => state?.blog?.currentPost?.recentPosts
   );
+
+  // State for new comment and deletion status
   const [isDeleting, setIsDeleting] = useState(false);
   const [newComment, setNewComment] = useState("");
   const { postDetails } = useSelector((state) => state?.blog?.currentPost);
+
   let postData;
   try {
+    // Parsing post content
     if (postDetails?.content) postData = JSON.parse(postDetails.content);
   } catch (error) {
     navigate("/posts");
   }
 
+  // Like function handler
   const Likefn = async () => {
     if (!isLoggedIn) {
       toast.error("Login to Like the Post..");
@@ -58,12 +67,14 @@ const Post = () => {
     if (!isLiked) await dispatch(LikeHandler(data));
     else await dispatch(DisLikeHandler(data));
   };
+
+  // Use effect to handle post data and comments
   useEffect(() => {
     if (!url) return navigate("/posts");
     PostHandler(url);
   }, [url]);
 
-
+  // Post handler function
   const PostHandler = async () => {
     const response = await dispatch(getPost({ url, userId }));
     if (!response?.payload?.success) {
@@ -76,6 +87,7 @@ const Post = () => {
     if (isLoggedIn && authId) dispatch(IsFollowing({ authId }));
   };
 
+  // Comment handler function
   const commentHandler = async (event) => {
     event.preventDefault();
     if (!isLoggedIn) return toast.error("Login to comment..");
@@ -89,6 +101,7 @@ const Post = () => {
     }
   };
 
+  // Post config for Blocks component
   const postConfig = {
     code: {
       className: "language-js",

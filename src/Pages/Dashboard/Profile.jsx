@@ -8,19 +8,25 @@ import { backgroundImage, fetchDash } from "../../Redux/authSlice";
 import convertUrl from "../../Helper/imageToWebp";
 
 const Profile = (props) => {
+  // Get the user data from the Redux store
   const data = useSelector((state) => state?.auth?.data);
   const dispatch = useDispatch();
+
+  // Get the background image URL from the Redux store
   const bgURL = useSelector((state) => state?.auth?.profile?.data?.bgImage);
   const bgImage = bgURL?.secure_url ? bgURL?.secure_url : imgBg;
+
+  // State variables for background image updating
   const [isBgUpdating, setBgUpdating] = useState(false);
   const [bgImg, setbgImg] = useState({
     bgImage: "",
   });
   const [previewImage, setPreviewImage] = useState("");
 
+  // Handle image upload
   const getImage = (event) => {
     event.preventDefault();
-    // getting the image
+    // Get the uploaded image
     const uploadedImage = event.target.files[0];
     if (uploadedImage) {
       setbgImg({
@@ -34,6 +40,7 @@ const Profile = (props) => {
     }
   };
 
+  // Handle background image update
   async function bgImageHandler(events) {
     if (!bgImg.bgImage) {
       toast.error("Please upload an Image for Background.");
@@ -56,6 +63,7 @@ const Profile = (props) => {
         My Profile Page
       </h1>
       <div className="mx-auto my-auto mt-4 flex flex-col gap-3">
+        {/* Display the background image */}
         {!isBgUpdating ? (
           <div
             className="relative mb-14 min-h-52 w-full rounded shadow-md shadow-gray-600 sm:min-h-60 lg:mb-16 lg:min-h-72 xl:min-h-[350px]"

@@ -1,9 +1,11 @@
 import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
+// Register chart.js components
 ChartJS.register(CategoryScale, PointElement, LinearScale, LineElement, Title, Tooltip, Legend);
 
 const ChartComponent = ({ likesData, followersData }) => {
+  // Format chart data
   const formatChartData = (data, label, color) => ({
     labels: data.map(item => {
       const date = new Date(item.week);    
@@ -24,6 +26,7 @@ const ChartComponent = ({ likesData, followersData }) => {
     ],
   });
 
+  // Chart options
   const chartOptions = {
     responsive: true,
     plugins: {
@@ -69,7 +72,7 @@ const ChartComponent = ({ likesData, followersData }) => {
   return (
     <div className='flex flex-col lg:flex-row w-full lg:w-fit xl:w-full gap-6 p-0 xl:flex-nowrap flex-wrap items-center justify-center mx-auto'>
       <div className='w-full xl:w-1/2 text-center bg-blue-600 p-4 rounded-md'>
-        {/* <h2 className='text-lg font-semibold mb-4 text-white'>Likes Over Time</h2> */}
+        {/* Likes chart */}
         {likesData && (
           <Line
             data={formatChartData(likesData, 'Likes', 'rgba(255,255,0,1)')} // yellow line
@@ -88,7 +91,7 @@ const ChartComponent = ({ likesData, followersData }) => {
       </div>
       
       <div className='w-full xl:w-1/2 text-center bg-blue-600 p-4 rounded-md'>
-        {/* <h2 className='text-lg font-semibold mb-4 text-white'>Followers Over Time</h2> */}
+        {/* Followers chart */}
         {followersData && (
           <Line
             data={formatChartData(followersData, 'Followers', 'rgba(0,255,0,1)')} // green line

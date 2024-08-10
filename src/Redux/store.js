@@ -6,14 +6,16 @@ import commentReducer from "../Redux/CommentSlice";
 import miscReducer from "../Redux/Miscellaneous"
 import resourceReducer from "../Redux/resourceSlice";
 
-const store  = configureStore({
-    reducer: {
-        blog: blogSliceReducer,
-        auth: authSliceReducer,
-        resource: resourceReducer,
-        misc: miscReducer,
-        comment: commentReducer
-    },
+// Create a Redux store with combined reducers
+const store = configureStore({
+  reducer: {
+    // Define reducers for each feature
+    blog: blogSliceReducer,
+    auth: authSliceReducer,
+    resource: resourceReducer,
+    misc: miscReducer,
+    comment: commentReducer
+  },
 });
 
 export default store;

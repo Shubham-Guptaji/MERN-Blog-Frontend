@@ -23,11 +23,11 @@ import VerifyAccount from "./Pages/VerifyAccount";
 import AuthToken from "./utils/AuthToken";
 import ChangePassword from "./Pages/Dashboard/ChangePassword";
 import PublicProfile from "./Pages/PublicProfile";
-import REDIRECT_PAGE from "./utils/GoogleRedirectPage";
 
 function App() {
   return (
     <AuthToken>
+      {/* Set metadata for the site */}
       <Helmet>
         <title>Alcodemy Blog</title>
         <meta
@@ -71,6 +71,8 @@ function App() {
         />
       </Helmet>
       <Routes>
+
+        {/* Public routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/posts" element={<TotalPosts />} />
         <Route path="/contact" element={<Contact />} />
@@ -82,14 +84,16 @@ function App() {
         <Route path="/user/:username/account/verify/:token" element={<VerifyAccount />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/username/:username" element={<PublicProfile />} />
-        <Route path="/api/auth/google" element={<REDIRECT_PAGE />} />
         
+        
+        {/* Protected routes */}
         <Route element={<NotRequireAuth />} >
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
-        
+                
+        {/* Authenticated routes */}
         <Route element={<RequireAuth allowedRoles={["user", "admin"]}/>} >
           <Route path="/dashboard" element={<DashLayout />} />
           <Route path="/create" element={<PostEditor />} />

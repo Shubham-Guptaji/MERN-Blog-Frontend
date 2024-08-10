@@ -7,11 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { fetchDash } from "../../Redux/authSlice";
 import { deletePost, publishPost, unPublishPost } from "../../Redux/blogSlice";
 import convertUrl from "../../Helper/imageToWebp";
+
 const AuthRecent = ({ post }) => {
+  // Get navigate function from react-router-dom
   const navigate = useNavigate();
+  // Get username from Redux state
   const { username } = useSelector((state) => state?.auth?.data);
+  // Get dispatch function from Redux
   const dispatch = useDispatch();
+  // Initialize isActive state with false
   const [isActive, setIsActive] = useState(false);
+
+  // Toggle post status (published/unpublished)
   function postStatus() {
     if (isActive) {
       setIsActive(false);
@@ -21,6 +28,8 @@ const AuthRecent = ({ post }) => {
       dispatch(publishPost({ id: post._id }));
     }
   }
+
+  // Delete post handler
   async function deleteHandler() {
     const response = await dispatch(
       deletePost({ id: post._id, authorId: post.author })
@@ -29,9 +38,12 @@ const AuthRecent = ({ post }) => {
       dispatch(fetchDash({ username }));
     }
   }
+
+  // Set initial isActive state based on post.isPublished
   useEffect(() => {
     setIsActive(post.isPublished);
   }, []);
+
   return (
     <>
       <div className="card mb-3 bg-base-100 shadow-xl lg:card-side">
@@ -57,6 +69,7 @@ const AuthRecent = ({ post }) => {
               </span>
             </div>
             <div className="ms-auto flex items-center justify-center gap-2">
+              {/* Toggle post status */}
               <input
                 type="checkbox"
                 className="toggle toggle-success toggle-sm"
@@ -64,12 +77,14 @@ const AuthRecent = ({ post }) => {
                 onChange={postStatus}
               />
 
+              {/* Edit post button */}
               <MdEditSquare className="h-6 w-6 text-purple-700 cursor-pointer" onClick={() =>
                     navigate("/update", {
                       state: { post },
                     })
                   } />
 
+              {/* Delete post button */}
               <button
                 onClick={() =>
                   document.getElementById("my-delete-modal").showModal()
@@ -77,6 +92,8 @@ const AuthRecent = ({ post }) => {
               >
                 <FaTrash className="h-4 w-4 text-red-600" />
               </button>
+
+              {/* Delete post modal */}
               <dialog id="my-delete-modal" className="modal">
                 <div className="modal-box">
                   <h3 className="text-lg font-bold text-indigo-700">
@@ -90,13 +107,14 @@ const AuthRecent = ({ post }) => {
                       <button className="btn me-2" onClick={deleteHandler}>
                         Confirm
                       </button>
-                      {/* if there is a button in form, it will close the modal */}
+                      {/* Close modal button */}
                       <button className="btn">Close</button>
                     </form>
                   </div>
                 </div>
               </dialog>
 
+              {/* Post likes */}
               <span className="flex items-center gap-1 text-primary">
                 <FaThumbsUp className="h-4 w-4" /> {post.likes}
               </span>
@@ -118,10 +136,10 @@ const AuthRecent = ({ post }) => {
           >
             {post.metaDescription}
           </p>
-
         </div>
       </div>
     </>
   );
 };
+
 export default AuthRecent;

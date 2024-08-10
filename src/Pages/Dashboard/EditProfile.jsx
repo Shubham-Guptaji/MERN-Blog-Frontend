@@ -6,25 +6,28 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const EditProfile = (props) => {
-    const data = useSelector((state) => state?.auth?.data);
-    const dispatch = useDispatch();
-    const [userInput, setUserInput] = useState({
-        firstName: data?.firstName,
-        lastName: data?.lastName,
-        bio: data?.bio,
-        username: data?.username,
-        email: data?.email,
-        avatar: null,
-        previewImage: data?.avatar?.secure_url,
-      });
+  // Get the user data from the Redux store
+  const data = useSelector((state) => state?.auth?.data);
+  const dispatch = useDispatch();
 
-      // function to handle the image upload
+  // Initialize the user input state with the current user data
+  const [userInput, setUserInput] = useState({
+    firstName: data?.firstName,
+    lastName: data?.lastName,
+    bio: data?.bio,
+    username: data?.username,
+    email: data?.email,
+    avatar: null,
+    previewImage: data?.avatar?.secure_url,
+  });
+
+  // Function to handle image upload
   const getImage = (event) => {
     event.preventDefault();
-    // getting the image
+    // Get the uploaded image
     const uploadedImage = event.target.files[0];
 
-    // if image exists then getting the url link of it
+    // If image exists, get the URL link of it
     if (uploadedImage) {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(uploadedImage);
@@ -37,7 +40,8 @@ const EditProfile = (props) => {
       });
     }
   };
-  // function to handle user input
+
+  // Function to handle user input
   const handleUserInput = (event) => {
     const { name, value } = event.target;
     setUserInput({
@@ -46,39 +50,41 @@ const EditProfile = (props) => {
     });
   };
 
-  // function to handle form submission
+  // Function to handle form submission
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    //   checking for the empty fields
-      if (
-        !userInput.firstName ||
-        !userInput.lastName ||
-        !userInput.bio ||
-        !userInput.email 
-      ) {
-        toast.error("All fields are mandatory");
-        return;
-      } else if (
-        !userInput.email.match(
-          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        )
-      ) {
-        toast.error("Invalid Email Id");
-        return;
-      }
+    // Check for empty fields
+    if (
+      !userInput.firstName ||
+      !userInput.lastName ||
+      !userInput.bio ||
+      !userInput.email
+    ) {
+      toast.error("All fields are mandatory");
+      return;
+    } else if (
+      !userInput.email.match(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      )
+    ) {
+      toast.error("Invalid Email Id");
+      return;
+    }
 
-      const formdata = new FormData();
-      formdata.append("firstName", userInput.firstName);
-      formdata.append("lastName", userInput.lastName);
-      formdata.append("bio", userInput.bio);
-      formdata.append("email", userInput.email);
-      formdata.append("username", userInput.username);
-      if(userInput.avatar) formdata.append("avatar", userInput.avatar);
-      // calling the api
-      let res = await dispatch(updateProfile(formdata));
-    
-    // clearing the input fields
+    // Create a new FormData object
+    const formdata = new FormData();
+    formdata.append("firstName", userInput.firstName);
+    formdata.append("lastName", userInput.lastName);
+    formdata.append("bio", userInput.bio);
+    formdata.append("email", userInput.email);
+    formdata.append("username", userInput.username);
+    if (userInput.avatar) formdata.append("avatar", userInput.avatar);
+
+    // Call the updateProfile API
+    let res = await dispatch(updateProfile(formdata));
+
+    // Clear the input fields if the update is successful
     if (res?.payload?.success) {
       setUserInput({
         firstName: "",
@@ -88,34 +94,33 @@ const EditProfile = (props) => {
         avatar: null,
         previewImage: null,
       });
-      await dispatch(fetchDash({username: res?.payload?.user?.username}));
+      await dispatch(fetchDash({ username: res?.payload?.user?.username }));
       props.changePage(6);
     }
-}
-    return (
-        <>
-             <div className="flex items-center justify-center min-h-[100vh] lg:min-h-[auto] sm:h-[80vh] px-2">
+  };
+
+  return (
+    <>
+      <div className="flex items-center justify-center min-h-[100vh] lg:min-h-[auto] sm:h-[80vh] px-2">
         <form
           onSubmit={handleFormSubmit}
           className="flex flex-col justify-center gap-5 rounded-lg p-4  bg-indigo-500 text-white w-[700px] sm:min-h-[auto] min-h-[750px] sm:h-[540px] my-16 sm:my-10 shadow-[0_0_10px_black] relative"
         >
-
+          {/* Back button */}
           <button
-          className="absolute top-8 text-2xl link text-accent cursor-pointer sm:inline w-fit"
-          onClick={() => props.changePage(6)}
+            className="absolute top-8 text-2xl link text-accent cursor-pointer sm:inline w-fit"
+            onClick={() => props.changePage(6)}
           >
             <AiOutlineArrowLeft />
-            
           </button>
 
           <h1 className="text-center text-2xl font-bold">
             <span>Update Profile</span>
           </h1>
 
-          
-
           <main className="sm:grid sm:grid-cols-2 gap-x-2 sm:gap-x-10">
             <div className="space-y-6">
+              {/* Profile image upload */}
               <div
               >
                 <label className="cursor-pointer" htmlFor="image_uploads">

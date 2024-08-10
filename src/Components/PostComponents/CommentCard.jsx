@@ -5,28 +5,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteComment, editComment, fetchComments } from "../../Redux/CommentSlice";
 
+// Component to display a single comment
 const CommentCard = ({ comment, postDetails }) => {
   const dispatch = useDispatch();
   const [commentedit, setCommentEdit] = useState(false);
   const [commentData, setCommentData] = useState(comment?.content);
 
+  // Get the current user's role and ID from the Redux store
   const role = useSelector((state) => state?.auth?.role);
   const userId = useSelector((state) => state?.auth?.data?.id);
 
+  // Handler to delete a comment
   const deleteHandler = async (commentId) => {
     let response = await dispatch(deleteComment(commentId));
     if (response?.payload?.success) {
+      // Refetch comments after deletion
       dispatch(fetchComments({ blogId: postDetails?._id }));
     }
   };
+
+  // Handler to update a comment
   const updateHandler = async () => {
-    if(commentData == "") return;
-    const response = await dispatch(editComment({commentId: comment._id, comment: commentData}));
-    if(response?.payload?.success) {
-      setCommentEdit(false);
-      dispatch(fetchComments({ blogId: postDetails?._id }))
+    if (commentData == "") return; // Don't update if comment is empty
+    const response = await dispatch(editComment({ commentId: comment._id, comment: commentData }));
+    if (response?.payload?.success) {
+      // Refetch comments after update
+      dispatch(fetchComments({ blogId: postDetails?._id }));
+      setCommentEdit(false); // Toggle edit mode off
     }
-    setCommentEdit(false);
+    setCommentEdit(false); // Toggle edit mode off in any case
   };
 
   return (
@@ -46,11 +53,13 @@ const CommentCard = ({ comment, postDetails }) => {
         {(comment?.commentAuthor?.id == userId || role == "admin") && (
           <div className="ms-auto flex items-center gap-2">
             {!commentedit ? (
+              // Show edit button if not in edit mode
               <MdModeEdit
                 className="h-6 w-6 cursor-pointer text-primary"
                 onClick={() => setCommentEdit(true)}
               />
             ) : (
+              // Show save button if in edit mode
               <FaSave
                 className="h-6 w-6 cursor-pointer text-primary"
                 onClick={updateHandler}
@@ -64,8 +73,10 @@ const CommentCard = ({ comment, postDetails }) => {
         )}
       </div>
       {!commentedit ? (
+        // Display comment text if not in edit mode
         <p className="mt-2 px-2 text-base text-gray-800">{commentData}</p>
       ) : (
+        // Display textarea for editing if in edit mode
         <textarea
           className="mt-3 h-24 w-full rounded-md border-2 border-indigo-600 p-2"
           placeholder="Your comment here"

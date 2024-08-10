@@ -1,9 +1,10 @@
-
+// Import necessary dependencies
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
+// Import local components and assets
 import homeImage from "../assets/undraw_Happy_news_re_tsbd.png";
 import AuthRecent from "../Components/Home/Auth-Recent-Card";
 import TrendingCards from "../Components/Home/Trending-Cards";
@@ -11,20 +12,30 @@ import Layout from "../Layout/Layout";
 import { getHomePagePosts } from "../Redux/blogSlice";
 import Carousel from "../Components/Home/Carousel-Section";
 
+// Define the HomePage component
 const HomePage = () => {
+  // Get the dispatch function from react-redux
   const dispatch = useDispatch();
+  // Get the navigate function from react-router-dom
   const Navigate = useNavigate();
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-  const isVerified = useSelector(state => state.auth?.data?.isVerified);
+  // Get the isLoggedIn and isVerified states from the auth reducer
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isVerified = useSelector((state) => state.auth?.data?.isVerified);
+
+  // Use the useEffect hook to fetch home page posts when the component mounts
   useEffect(() => {
     dispatch(getHomePagePosts());
   }, []);
 
+  // Get the trendingPosts, popularAuthorPosts, and tags from the blog reducer
   const { trendingPosts, popularAuthorPosts, tags } = useSelector(
     (state) => state.blog
   );
+
+  // Return the JSX for the HomePage component
   return (
     <Layout>
+      {/* Header section */}
       <header className="container mx-auto flex flex-col-reverse px-3 md:w-10/12 md:flex-row">
         <div className=" flex h-[inherit]  items-center xl:w-4/6">
           <div className="h-fit w-full ">

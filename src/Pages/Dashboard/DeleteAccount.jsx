@@ -3,16 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteAccount } from "../../Redux/authSlice";
 
+// Component to handle account deletion
 const DeleteAccount = ({}) => {
-    const userId = useSelector(state => state?.auth?.data?.id);
-    const dispatch = useDispatch();
-    const [isChecked, setIsChecked] = useState(false);
-    const firstName = useSelector(state => state?.auth?.data?.firstName);
-    const deleteHandler = async () => {
-        if (isChecked) {
-            await dispatch(deleteAccount({id: userId}));
-        }
+  // Get the user ID from the Redux store
+  const userId = useSelector(state => state?.auth?.data?.id);
+  const dispatch = useDispatch();
+  const [isChecked, setIsChecked] = useState(false);
+  // Get the user's first name from the Redux store
+  const firstName = useSelector(state => state?.auth?.data?.firstName);
+
+  // Handler function to delete the account
+  const deleteHandler = async () => {
+    // Only delete the account if the checkbox is checked
+    if (isChecked) {
+      await dispatch(deleteAccount({ id: userId }));
     }
+  }
+  
     return (
         <> 
             <h1 className="mb-7 text-2xl font-semibold text-primary lg:text-3xl">

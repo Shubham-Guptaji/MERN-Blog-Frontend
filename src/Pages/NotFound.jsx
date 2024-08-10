@@ -1,6 +1,10 @@
+// Import the Link component from react-router-dom
 import { Link } from "react-router-dom";
 
+// Import the Layout component
 import Layout from "../Layout/Layout";
+
+// Define the NotFound component
 const NotFound = () => {
   return (
     <Layout>

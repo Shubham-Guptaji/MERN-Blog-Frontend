@@ -1,6 +1,10 @@
+// Import the required CSS file
 import "./Privacy-Policy.css";
 
+// Import the Layout component
 import Layout from "../Layout/Layout";
+
+// Define the PrivacyPolicy component
 export const PrivacyPolicy = () => {
   return (
     <Layout>

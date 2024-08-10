@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom"; // Import Link for proper navigation
 
 import { logout } from "../Redux/authSlice"
@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    // scroll to the top on page render
+    // Scroll to the top on page render
     window.scrollTo(0, 0);
   }, []);
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +17,7 @@ const Layout = ({ children }) => {
   // let authId = useSelector(state => state?.auth?.data?.id);
   const toggleMenu = () => setIsOpen(!isOpen);
   
+  // Navigation items for the header and footer
   const navigationItems = [
     { name: "Home", to: "/" },
     { name: "All Posts", to: "/posts" },
@@ -26,13 +27,11 @@ const Layout = ({ children }) => {
   const year = date.getFullYear();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  // Handle logout functionality
   const logouthandler = async () => {
     const res = await dispatch(logout());
     if(res?.payload?.success) navigate("/sign-in");
   }
-  // if(isLoggedIn && !authId) {
-  //   logouthandler();
-  // }
 
   return (
     <div className="flex min-h-screen flex-col ">

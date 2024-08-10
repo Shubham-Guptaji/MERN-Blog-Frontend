@@ -8,35 +8,52 @@ import { changemyPassword } from "../../Redux/authSlice";
 import toast from "react-hot-toast";
 
 const ChangePassword = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [data, setData] = useState({
+  // Get the navigate function from react-router-dom
+  const navigate = useNavigate();
+  // Get the dispatch function from react-redux
+  const dispatch = useDispatch();
+  
+  // Initialize the state with empty values for old password, new password, and confirm password
+  const [data, setData] = useState({
+    oldPassword: "",
+    password: "",
+    confirmpassword: ""
+  });
+
+  // Handle form submission
+  async function submitHandler(events) {
+    events.preventDefault();
+    
+    // Validate old password
+    if (data.oldPassword.length < 8) {
+      toast.error("Please enter valid password");
+    } 
+    // Validate new password
+    else if (data.password.length < 8) {
+      return toast.error("Password must be at least 8 characters long.");
+    } 
+    // Validate password strength
+    else if (!data.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={}\[\]:;<>?,./\\-]).{8,}$/)) {
+      return toast.error("Password should be longer than 8 alphanumberic small and capital characters with special characters.");
+    } 
+    // Validate confirm password
+    else if (data.password != data.confirmpassword) {
+      return toast.error("Passwords and Confirm Password do not match.");
+    } 
+    
+    // Dispatch the change password action
+    let res = await dispatch(changemyPassword({ oldPassword: data.oldPassword, newPassword: data.password }));
+    
+    // If the password change is successful, reset the form and navigate back to the previous page
+    if (res?.payload?.success) {
+      setData({
         oldPassword: "",
         password: "",
         confirmpassword: ""
-    })
-    async function submitHandler (events) {
-        events.preventDefault();
-        if(data.oldPassword.length < 8) {
-            toast.error("Please enter valid password");
-        } else if(data.password.length < 8 ) {
-            return toast.error("Password must be at least 8 characters long.");
-        } else if (!data.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+={}\[\]:;<>?,./\\-]).{8,}$/)){
-            return toast.error("Password should be longer than 8 alphanumberic small and capital characters with special characters.")
-        }else if(data.password != data.confirmpassword) {
-            return toast.error("Passwords and Confirm Password do not match.");
-        } 
-        
-        let res = await dispatch(changemyPassword({oldPassword: data.oldPassword, newPassword: data.password}))
-        if(res?.payload?.success) {
-            setData({
-                oldPassword: "",
-                password: "",
-                confirmpassword: ""
-            })
-            navigate(-1);
-        }
+      });
+      navigate(-1);
     }
+  }
     return (
         <Layout>
             <div className="bg-slate-200">

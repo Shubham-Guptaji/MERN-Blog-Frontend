@@ -1,26 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
 import convertUrl from "../../Helper/imageToWebp";
+
+// TrendingCards component displays a single trending post
 const TrendingCards = (props) => {
   const navigate = useNavigate();
+
   return (
     <>
       <div className="card max-w-96 bg-base-100 shadow-xl">
         <figure>
           <img
+            // Convert image URL to WebP format
             src={convertUrl(props.element.public_image.resource_url)}
             alt={props.element.title}
             height="1600px"
             width="900px"
             className="aspect-video cursor-pointer"
             onClick={() => {
-                navigate(`/posts/${props.element.url}`);
-              }}
+              // Navigate to post details page on image click
+              navigate(`/posts/${props.element.url}`);
+            }}
           />
         </figure>
         <div className="card-body">
           <h2
             className="card-title line-clamp-2 cursor-pointer text-indigo-600"
             onClick={() => {
+              // Navigate to post details page on title click
               navigate(`/posts/${props.element.url}`);
             }}
           >
@@ -33,7 +39,7 @@ const TrendingCards = (props) => {
             <img
               src={props.element.author.avatar.secure_url}
               alt={props.element.author.username}
-              className="h-8 w-8 rounded-full" 
+              className="h-8 w-8 rounded-full"
             />
             <Link to={`/username/${props.element.author.username}`}>
               {props.element.author.firstName} {props.element.author.lastName}
