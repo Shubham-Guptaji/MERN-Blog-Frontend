@@ -79,9 +79,18 @@ const AuthRecent = ({ post }) => {
 
               {/* Edit post button */}
               <MdEditSquare className="h-6 w-6 text-purple-700 cursor-pointer" onClick={() =>
-                    navigate("/update", {
-                      state: { post },
-                    })
+                  //   {
+                  //     console.log(post)
+                  //     navigate("/update", {
+                  //     state: { post },
+                  //   });
+                  // }
+                  {
+                    const updatedPost = { ...post };
+                    updatedPost.author = {_id: null};
+                    updatedPost.author._id = post?.author;
+                    navigate("/update", { state: { post: updatedPost } });
+                }
                   } />
 
               {/* Delete post button */}

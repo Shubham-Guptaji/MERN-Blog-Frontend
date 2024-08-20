@@ -190,7 +190,6 @@ function PostEditor() {
     formData.append("url", postData.url.replace(/\s+/g, "-"));
     formData.append("postImage", postData.postImage);
     formData.append("authorId", postData.authorId);
-
     let response;
     if (post) {
       let allData = { data: formData, id: postData.id };
@@ -214,6 +213,7 @@ function PostEditor() {
         url: "",
         postImage: null,
       });
+      document.getElementById('editorjs').innerHTML = "";
       navigate("/dashboard");
     }
   };

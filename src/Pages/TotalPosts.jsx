@@ -29,6 +29,11 @@ const TotalPosts = () => {
     // Set a new timer for 1 second
     const newTimer = setTimeout(() => {
       if (value != "") dispatch(searchTag({ tag: value }));
+      else {
+        setTag(null);
+        setCurrentPage(0);
+        dispatch(allblogposts(currentPage * 20));
+      }
     }, 1200);
 
     setTimer(newTimer);
@@ -39,10 +44,13 @@ const TotalPosts = () => {
   const handleSearch = (event) => {
     event.preventDefault();
     if (searchInput == "") {
-      toast.error("Search keyword is required...");
+      // toast.error("Search keyword is required...");
+      setTag(null);
+      setCurrentPage(0);
+      dispatch(allblogposts(currentPage * 20));
       return;
     }
-    dispatch(searchTag(searchInput));
+    dispatch(searchTag({tag: searchInput}));
   };
 
   // Hide the drawer when the close button is clicked

@@ -155,6 +155,7 @@ export const updateToken = createAsyncThunk("/user/refresh-token", async () => {
         return res.data;
     } catch (error) {
         toast.error(error.response.data.message);
+        throw error;
     }
 });
 
@@ -361,18 +362,18 @@ const authSlice = createSlice({
                 state.token = action?.payload?.user?.tokens;
             })
             .addCase(logout.rejected, (state) => {
-                localStorage.clear();
-                // localStorage.setItem("isLoggedIn", false);
                 state.isLoggedIn = false;
                 state.token = null;
                 state.data = null;
+                localStorage.clear();
+                // localStorage.setItem("isLoggedIn", false);
             })
             // for user logout
             .addCase(logout.fulfilled, (state) => {
-                localStorage.clear();
                 state.isLoggedIn = false;
                 state.token = null;
                 state.data = null;
+                localStorage.clear();
             })
             .addCase(updateToken.fulfilled, (state, action) => {
                 
@@ -388,10 +389,10 @@ const authSlice = createSlice({
                 state.token = action?.payload?.user?.tokens;
             })
             .addCase(updateToken.rejected, (state) => {
-                localStorage.clear();
                 state.token = null;
                 state.data = null;
                 state.isLoggedIn = false;
+                localStorage.clear();
                 window.location.href = "https://blog.alcodemy.tech";
             })
             .addCase(fetchDash.fulfilled, (state, action) => {
