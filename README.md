@@ -42,7 +42,7 @@ This repository contains the frontend code for a full-featured multiple user web
 
    ```
      bash
-     git clone https://github.com/yourusername/blog-frontend.git
+     git clone [https://github.com/yourusername/blog-frontend.git](https://github.com/Shubham-Guptaji/MERN-Blog-Frontend.git)
    ```
    
 2. **Install Dependencies:**
