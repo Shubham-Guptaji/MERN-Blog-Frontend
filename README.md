@@ -1,8 +1,62 @@
-# React + Vite
+# Blog Website Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
 
-Currently, two official plugins are available:
+This repository contains the frontend code for a full-featured multiple user web based blogging application. It provides a responsive user interface for creating, editing, and managing blog posts, along with features like user authentication, profile management, and commenting etc.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+
+- **User Authentication:**
+  - Secure login and registration using JWT.
+  - OAuth authentication via Google.
+
+- **Post Management:**
+  - Create, edit, delete, and view blog posts.
+  - Tag posts for easy categorization and searching.
+
+- **Comment Management:**
+  - Add, edit, and delete comments on blog posts.
+  - Like and interact with posts.
+
+- **User Management:**
+  - Follow/unfollow authors.
+  - Update user profiles, including profile pictures and background images.
+
+- **Responsive Design:**
+  - Optimized for desktops, tablets, and mobile devices.
+
+## Technologies Used
+
+- **Frontend Framework:** React.js
+- **State Management:** Redux
+- **Rich Text Editor:** Editor.js
+- **Routing:** React Router
+- **HTTP Client:** Axios
+- **Styling:** Tailwind Css
+
+## Setup Instructions
+
+1. **Clone the Repository:**
+
+   ```
+     bash
+     git clone https://github.com/yourusername/blog-frontend.git
+   ```
+   
+2. **Install Dependencies:**
+   ```
+     cd blog-frontend
+     npm install
+   ```
+   
+3. **Run the Development Server:**
+   ```
+     npm run dev
+   ```
+
+The app will be available at http://localhost:5173.
+
+## Ownership
+Shubham Gupta
+
+
