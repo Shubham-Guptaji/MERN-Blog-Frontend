@@ -41,7 +41,7 @@ This repository contains the frontend code for a full-featured multiple user web
 1. **Clone the Repository:**
 
    ```
-     bash
+     git init
      git clone https://github.com/Shubham-Guptaji/MERN-Blog-Frontend.git
    ```
    
