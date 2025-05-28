@@ -2,7 +2,7 @@
 
 # Blog Website Frontend
 
-[Production Site](https://blog.alcodemy.tech)
+[Production Site](https://blog.alcodemy.space)
 
 ## Introduction
 
