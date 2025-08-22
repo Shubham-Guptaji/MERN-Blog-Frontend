@@ -4,12 +4,13 @@ import Blocks from "editorjs-blocks-react-renderer";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { FaRobot, FaSpinner } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Importing components and helpers
 import Layout from "../../Layout/Layout";
-import { getPost } from "../../Redux/blogSlice";
+import { getPost, summarizePost } from "../../Redux/blogSlice";
 import { fetchComments } from "../../Redux/CommentSlice";
 import { CreateComment } from "../../Redux/CommentSlice";
 import {
@@ -46,6 +47,7 @@ const Post = () => {
 
   // State for new comment and deletion status
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isAILoading, setIsAILoading] = useState(false);
   const [newComment, setNewComment] = useState("");
   const { postDetails } = useSelector((state) => state?.blog?.currentPost);
 
@@ -74,6 +76,14 @@ const Post = () => {
     PostHandler(url);
   }, [url]);
 
+    // Reset AI loading state when modal opens
+  const isModalOpen = useSelector((state) => state?.blog?.isModalOpen);
+  useEffect(() => {
+    if (isModalOpen) {
+      setIsAILoading(false);
+    }
+  }, [isModalOpen]);
+
   // Post handler function
   const PostHandler = async () => {
     const response = await dispatch(getPost({ url, userId }));
@@ -85,6 +95,22 @@ const Post = () => {
     dispatch(PostLike(data));
     const authId = response?.payload?.postDetails?.author?._id;
     if (isLoggedIn && authId) dispatch(IsFollowing({ authId }));
+  };
+
+    // AI summary handler function
+  const handleAISummary = async () => {
+    if(!isLoggedIn) return toast.error("Login to generate AI summary..");
+    setIsAILoading(true);
+    try {
+      const result = await dispatch(summarizePost(postDetails._id));
+      if (result?.payload == undefined || !result?.payload?.success) {
+        setIsAILoading(false);
+        return;
+      }
+    } catch (error) {
+      setIsAILoading(false);
+      toast.error("Failed to generate AI summary creeper");
+    }
   };
 
   // Comment handler function
@@ -187,6 +213,19 @@ const Post = () => {
           )}
 
           <SharePost postDetails={postDetails} url={url} />
+          <button
+            onClick={handleAISummary}
+            disabled={isAILoading}
+            className="ml-2 mt-4 flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+            title="Generate AI Summary"
+          >
+            {isAILoading ? (
+              <FaSpinner className="text-lg animate-spin" />
+            ) : (
+              <FaRobot className="text-lg" />
+            )}
+            <span>{isAILoading ? "Generating..." : "AI Summary"}</span>
+          </button>
 
           {postData && <Blocks data={postData} config={postConfig} />}
           <div className="my-4 flex items-center gap-2 font-semibold">

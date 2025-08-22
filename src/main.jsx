@@ -9,6 +9,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import store from './Redux/store.js'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import AISummaryModal from './Components/PostComponents/AISummaryModal.jsx'
 
 // Create root element and render the app
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <GoogleOAuthProvider clientId="962263182715-venvjtrlb1qgk95bhv79ilbrv5esp4s3.apps.googleusercontent.com">
         <BrowserRouter>
           <App />
+          <AISummaryModal />
           <Toaster />
         </BrowserRouter>
       </GoogleOAuthProvider>

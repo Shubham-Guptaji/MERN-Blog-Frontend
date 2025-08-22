@@ -14,7 +14,8 @@ const initialState = {
   currentPost: {
     postDetails: {},
     recentPosts: []
-  }
+  },
+  isModalOpen: false,
 };
 
 // Thunk to create a new post
@@ -136,11 +137,35 @@ export const deletePost = createAsyncThunk("/delete-post", async (data) => {
   }
 });
 
+// API for AI summary generation
+export const summarizePost = createAsyncThunk("/summarize", async (postId) => {
+  try {
+    const res = axiosInstance.get(`/blogs/summarize/${postId}`);
+    toast.promise(res, {
+      loading: "Generating summary...",
+      success: "Summary generated successfully",
+      error: "Failed to generate summary. Please try again later.",
+    });
+    // Wait for the promise to resolve and return the data
+    const response = await res;
+    return response?.data;
+  } catch (error) {
+    toast.error(error?.response?.data?.message);
+    throw new Error("Failed to generate summary");
+  }
+});
+
 // Blog slice
 const blogSlice = createSlice({
     name: "blog",
     initialState,
-    reducers: {},
+    reducers: {
+        // Action to close the AI summary modal
+        closeAISummaryModal: (state) => {
+            state.isModalOpen = false;
+            state.currentPost.postDetails.summary = "";
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getHomePagePosts.fulfilled, (state, action) => {
@@ -171,9 +196,15 @@ const blogSlice = createSlice({
 
                 }
             })
+            .addCase(summarizePost.fulfilled, (state, action) => {
+                if(action.payload){
+                    state.currentPost.postDetails.summary = action.payload.summary;
+                }
+                state.isModalOpen = true;
+            });
     },
 });
 
 
-export const {} = blogSlice.actions;
+export const { closeAISummaryModal } = blogSlice.actions;
 export default blogSlice.reducer;
